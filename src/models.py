@@ -6,18 +6,21 @@ from sqlalchemy.sql.schema import ForeignKey
 
 Base = declarative_base()
 
-vinkki_courses = Table('post_keywords', Base.metadata,
-     Column('kirjavinkit', ForeignKey('kirjavinkit.id'), primary_key=True),
-     Column('kurssit', ForeignKey('kurssit.id'), primary_key=True)
+vinkki_courses = Table('vinkki_courses', Base.metadata,
+     Column('id', Integer, primary_key=True),
+     Column('vinkki', ForeignKey('kirjavinkit.id')),
+     Column('kurssi', ForeignKey('kurssit.id'))
  )
 
 class Kurssi(Base):
     __tablename__= 'kurssit'
     id = Column(Integer, primary_key=True)
-    kurssin_nimi: Column(String, nullable= false)
+    nimi = Column(String, nullable= false)
     vinkit = relationship('KirjaVinkki',
                                     secondary="vinkki_courses",
-                                    back_populates="related_courses")
+                                    backref="Kurssi")
+    def __str__(self) -> str:
+        return self.nimi
 
 class KirjaVinkki(Base):
     __tablename__ = 'kirjavinkit'
@@ -25,14 +28,13 @@ class KirjaVinkki(Base):
     otsikko = Column(String, nullable= false)
     kirjoittaja = Column(String)
     tyyppi = Column(String, nullable= false)
-
     related_courses = relationship('Kurssi',
-                                    secondary="vinkki_courses",
-                                    back_populates="vinkit")
+     secondary=vinkki_courses,
+     backref='KirjaVinkki')
 
     def add_related_course(self, kurssi: Kurssi):
         self.related_courses.append(kurssi)
 
     def __str__(self) -> str:
-        return f'Otsikko: {self.otsikko} Kirjoittaja: {self.kirjoittaja} Related courses: {self.related_courses}'
+        return f'Id: [{self.id}] Otsikko: {self.otsikko} Kirjoittaja: {self.kirjoittaja} Related courses: {self.related_courses}'
 
