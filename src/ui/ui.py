@@ -1,23 +1,26 @@
 class Ui:
 
-    def __init__(self):
-        pass
+    def __init__(self, io):
+        self.io = io
 
 
     def start(self):
-        print('Tervetuloa käyttämään Lukuvinkki-sovellusta \n')
+        self.io.write('Tervetuloa käyttämään Lukuvinkki-sovellusta \n')
         self.print_options()
     
-
     def print_options(self):
+        self.io.write('Valitse toiminto: ')
         while True:
-            print('Valitse toiminto: ')
-            print('1: Hae lukuvinkki')
-            print('2: Lisää lukuvinkki')
-            print('3: Lopeta')
-            try:
-                user_input = int(input('Anna komento: '))
-            except ValueError:
-                print('Anna kelvollinen komento')
-            print()
+            self.io.write('Valitse toiminto: ')
+            self.io.write('1: Hae lukuvinkki')
+            self.io.write('2: Lisää lukuvinkki')
+            self.io.write('3: Lopeta')
+            self.process_command(self.io.read_input('Anna komento: '))
+
+    def process_command(self, command):
+        try:
+            user_input = int(command)
+        except ValueError:
+            self.io.write('Anna kelvollinen komento')
+        print()
 
