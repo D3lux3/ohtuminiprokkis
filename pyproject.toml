@@ -8,6 +8,8 @@ authors = ["D3lux3 <dani.haapaniemi@hotmail.com>"]
 python = "^3.8"
 pytest = "^6.2.5"
 SQLAlchemy = "^1.4.27"
+pylint = "^2.12.1"
+coverage = "^6.2"
 
 [tool.poetry.dev-dependencies]
 
