@@ -1,5 +1,5 @@
 from typing import List
-from models import KirjaVinkki, Base;
+from models import KirjaVinkki, Base, Kurssi;
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -23,7 +23,9 @@ class db:
 
 database = db("tietokanta", Base)
 
-database.add_vinkki_to_db(KirjaVinkki(otsikko = "Hello World", kirjoittaja = "Dani"))
+vinggi = KirjaVinkki(otsikko = "Hello World", kirjoittaja = "Dani")
+vinggi.related_courses.append(Kurssi("TKT20006 Ohjelmistotuotanto"))
+database.add_vinkki_to_db()
 
 for kirjavinkki in database.find_all_vinkit():
     print(kirjavinkki)
