@@ -17,6 +17,12 @@ poetry install
 
 ### Ohjelma
 
+Komennot suoritetaan virtuaaliympäristössä komennolla:
+
+```bash
+poetry shell
+```
+
 Ohjelma suoritetaan komennolla:
 
 ```bash
