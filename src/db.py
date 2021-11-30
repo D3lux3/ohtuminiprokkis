@@ -1,5 +1,5 @@
 from typing import List
-from models import KirjaVinkki, Base, Kurssi;
+from models import KirjaVinkki, Base, Kurssi
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
