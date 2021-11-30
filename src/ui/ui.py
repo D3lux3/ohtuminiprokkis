@@ -1,6 +1,7 @@
 from db import db
 from models import KirjaVinkki, Base
 
+
 class Ui:
 
     def __init__(self, io):
