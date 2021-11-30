@@ -25,11 +25,18 @@ class KirjaVinkki(Base):
     otsikko = Column(String, nullable= false)
     kirjoittaja = Column(String)
     tyyppi = Column(String, nullable= false)
-    related_courses = relationship('Kurssi', secondary=vinkki_courses)
+    kommentti = Column(String, nullable= false)
+    related_courses = relationship('Kurssi', secondary=vinkki_courses, backref='vinkit')
 
     def add_related_course(self, kurssi: Kurssi):
         self.related_courses.append(kurssi)
 
     def __str__(self) -> str:
-        return f'Id: [{self.id}] Otsikko: {self.otsikko} Kirjoittaja: {self.kirjoittaja} Related courses: {self.related_courses}'
+        kurssit = self.related_courses
+        kurssit_listana = []
+        for kurssi in kurssit:
+            kurssit_listana.append(kurssi.nimi)
+        kurssit_str = ' ,'.join(kurssit_listana)
+        
+        return f'otsikko: {self.otsikko} \nKommentti: {self.kommentti}'
 
