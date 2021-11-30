@@ -8,17 +8,14 @@ Base = declarative_base()
 
 vinkki_courses = Table('vinkki_courses', Base.metadata,
      Column('id', Integer, primary_key=True),
-     Column('vinkki', ForeignKey('kirjavinkit.id')),
-     Column('kurssi', ForeignKey('kurssit.id'))
+     Column('vinkki_id', ForeignKey('kirjavinkit.id')),
+     Column('kurssi_id', ForeignKey('kurssit.id'))
  )
 
 class Kurssi(Base):
     __tablename__= 'kurssit'
     id = Column(Integer, primary_key=True)
     nimi = Column(String, nullable= false)
-    vinkit = relationship('KirjaVinkki',
-                                    secondary="vinkki_courses",
-                                    backref="Kurssi")
     def __str__(self) -> str:
         return self.nimi
 
@@ -28,9 +25,7 @@ class KirjaVinkki(Base):
     otsikko = Column(String, nullable= false)
     kirjoittaja = Column(String)
     tyyppi = Column(String, nullable= false)
-    related_courses = relationship('Kurssi',
-     secondary=vinkki_courses,
-     backref='KirjaVinkki')
+    related_courses = relationship('Kurssi', secondary=vinkki_courses)
 
     def add_related_course(self, kurssi: Kurssi):
         self.related_courses.append(kurssi)

@@ -31,10 +31,16 @@ database = db("tietokanta", Base)
 vinggi = KirjaVinkki(otsikko = "Hello World", kirjoittaja = "Dani")
 kurssi = Kurssi(nimi = 'TKT20006 Ohjelmistotuotanto')
 
+vinggi2 = KirjaVinkki(otsikko="anoter kirja", kirjoittaja="Dani2")
+kurssi2 = Kurssi(nimi='ohja')
+
 database.add_vinkki_to_db(vinggi)
 
 database.add_course_to_vinkki(1, kurssi)
 
+database.add_vinkki_to_db(vinggi2)
+
+database.add_course_to_vinkki(2, kurssi2)
 
 for kirjavinkki in database.find_all_vinkit():
     print(kirjavinkki)
