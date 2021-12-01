@@ -20,6 +20,9 @@ class Ui:
             self.io.write('2: Lisää lukuvinkki')
             self.io.write('3: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
+
+            if user_input == 1:
+                self.print_vinkit()
             if user_input == 2:
                 otsikko = self.io.read_input('Vinkin otsikko: ')
                 kommentti = self.io.read_input('Kommentti: ')
