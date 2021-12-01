@@ -38,3 +38,7 @@ class Ui:
     def add_new(self, otsikko, kommentti):
         vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
         self.db.add_vinkki_to_db(kirja = vinkki)
+
+    def print_vinkit(self):
+        for vinkki in self.db.find_all_vinkit():
+            self.io.write(vinkki)
