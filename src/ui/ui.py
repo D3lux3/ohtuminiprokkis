@@ -35,6 +35,6 @@ class Ui:
             self.io.write('Anna kelvollinen komento')
         print()
 
-    def add_new(self, otsikko, kirjoittaja):
-        vinkki = KirjaVinkki(otsikko = otsikko, kirjoittaja = kirjoittaja)
+    def add_new(self, otsikko, kommentti):
+        vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
         self.db.add_vinkki_to_db(kirja = vinkki)
