@@ -1,9 +1,10 @@
 import unittest
+from unittest.mock import Mock
 from ui.ui import Ui
 
 class Stub_io:
-    def __init__(self):
-        self.inputs = []
+    def __init__(self, inputs = []):
+        self.inputs = inputs
         self.outputs = []
 
     def read_input(self, text):
