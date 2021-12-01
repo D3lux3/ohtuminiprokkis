@@ -19,11 +19,10 @@ class Ui:
             self.io.write('2: Lisää lukuvinkki')
             self.io.write('3: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
-            print(user_input)
             if user_input == 2:
                 otsikko = self.io.read_input('Vinkin otsikko: ')
-                kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
-                self.add_new(otsikko, kirjoittaja)
+                kommentti = self.io.read_input('Kommentti: ')
+                self.add_new(otsikko, kommentti)
             if user_input == 3:
                 break
 
