@@ -43,5 +43,6 @@ class Ui:
         self.db.add_vinkki_to_db(kirja = vinkki)
 
     def print_vinkit(self):
-        for vinkki in self.db.find_all_vinkit():
+        vinkit = self.db.find_all_vinkit()
+        for vinkki in vinkit:
             self.io.write(vinkki)
