@@ -18,10 +18,10 @@ class TestUi(unittest.TestCase):
 
     def setUp(self):
         self.io = Stub_io()
-        self.stub_ui = Ui(self.io)
+        self.db_mock = Mock()
+        self.stub_ui = Ui(self.io, self.db_mock)
 
     def test_legal_input_command(self):
         self.stub_ui.process_command(1)
         self.assertEqual(len(self.io.outputs), 0)
 
-        
