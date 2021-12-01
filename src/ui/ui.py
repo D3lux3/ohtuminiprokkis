@@ -15,7 +15,6 @@ class Ui:
 
     def print_options(self):
         while True:
-<<<<<<< HEAD
             self.io.write('Valitse toiminto: ')
             self.io.write('1: Hae lukuvinkki')
             self.io.write('2: Lisää lukuvinkki')
