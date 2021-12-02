@@ -23,7 +23,7 @@ class TestUi(unittest.TestCase):
 
     def test_legal_input_command(self):
         self.stub_ui.process_command(1)
-        self.assertEqual(len(self.io.outputs), 999)
+        self.assertEqual(len(self.io.outputs), 0)
 
     def test_add_new_calls_db_add_vinkki_to_db(self):
         self.io = Stub_io(["2", "Pro Git Book", "Very cool", "3"])
