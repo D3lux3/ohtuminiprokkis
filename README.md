@@ -16,7 +16,7 @@ Ohjelma on analysoitu sekä suunniteltu ryhmässä ennen ensimmäistä sprintti�
 - Ohjelmassa on tekstipohjainen komentorivikäyttöliittymä lukuvinkin lisäystä varten.
 - Käyttöliittymä lukee käyttäjän syötettä.
 - Lukuvinkki on toteutettu omana luokkanaan.
-- Lukuvinkkejä voi hakea tietokannasta ja ne voi tulostaa.
+- Lukuvinkkit voi tulostaa tietokannasta.
 - Ohjelman testaus on aloitettu.
 
 ## Asennus
