@@ -1,12 +1,10 @@
-from models import Base
+from models import base
 from ui.ui import Ui
 from ui.io import Io
-from db import db
-from models import Base
-
+from db import DataBase
 def main():
     io = Io()
-    database = db("tietokanta", Base)
+    database = DataBase("tietokanta", base)
     ui = Ui(io, database)
     ui.start()
 
