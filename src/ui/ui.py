@@ -1,12 +1,11 @@
-from db import db
-from models import KirjaVinkki, Base
+from models import KirjaVinkki
 
 
 class Ui:
 
-    def __init__(self, io):
+    def __init__(self, io, db):
         self.io = io
-        self.db = db("tietokanta", Base)
+        self.db = db
 
 
     def start(self):
