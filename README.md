@@ -64,6 +64,7 @@ pylint src
 
 Coverage raportti saadaan komennolla:
 
-```coverage run --branch -m pytest; coverage html
+```bash 
+coverage run --branch -m pytest; coverage html
 ```
 
