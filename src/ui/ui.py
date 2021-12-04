@@ -2,7 +2,6 @@ from models import KirjaVinkki
 
 
 class Ui:
-
     def __init__(self, io, db):
         self.io = io
         self.db = db
