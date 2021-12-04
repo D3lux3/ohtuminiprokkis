@@ -24,3 +24,21 @@ class DataBase:
     def find_all_vinkit(self) -> List[KirjaVinkki]:
         """Hakee kaikki kirjavinkit tietokannasta, ja palauttaa ne listana."""
         return self.session.query(KirjaVinkki).all()
+
+    def delete_vinkki_with_id(self, vinkin_id: int):
+        """Poistaa vinkin id perusteella"""
+        if self.query_with_id(vinkin_id) is not False:
+            self.session.delete(self.query_with_id(vinkin_id))
+            self.session.commit()
+            return True
+
+        return False
+
+    def query_with_id(self, vinkin_id: int):
+        """Hakee vinkin id perusteella"""
+        query_result = self.session.query(KirjaVinkki).get(vinkin_id)
+
+        if query_result is not None:
+            return self.session.query(KirjaVinkki).get(vinkin_id)
+
+        return False

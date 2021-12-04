@@ -37,4 +37,4 @@ class KirjaVinkki(base):
             kurssit_listana.append(kurssi.nimi)
         kurssit_str = ' ,'.join(kurssit_listana)
 
-        return f'\n otsikko: {self.otsikko} \nKommentti: {self.kommentti}\n liittyvät kurssit: {kurssit_str}'
+        return f'\nOtsikko: {self.otsikko} \nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}'
