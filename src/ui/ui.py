@@ -2,7 +2,6 @@ from models import KirjaVinkki
 
 
 class Ui:
-
     def __init__(self, io, db):
         self.io = io
         self.db = db
@@ -35,7 +34,6 @@ class Ui:
             return user_input
         except ValueError:
             self.io.write('Anna kelvollinen komento')
-        print()
 
     def add_new(self, otsikko, kommentti):
         vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
