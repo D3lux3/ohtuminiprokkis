@@ -30,6 +30,7 @@ class Ui:
             if user_input == 3:
                 self.delete_vinkki()
             if user_input == 4:
+                self.io.write('Kiitos ja näkemiin!')
                 break
             print()
 
@@ -49,7 +50,7 @@ class Ui:
         self.io.write('Tallennetut lukuvinkit:\n')
         for vinkki in vinkit:
             self.io.write(f'{vinkki}\n')
-        
+
     def delete_vinkki(self):
         self.io.write('Anna poistettavan vinkin id:\n')
         self.print_vinkit_with_id()
@@ -60,9 +61,8 @@ class Ui:
                 self.io.write(f'Vinkki id {user_input} poistettu')
             else:
                 self.io.write('Vinkin poistaminen epäonnistui')
-        
+
     def print_vinkit_with_id(self):
         vinkit = self.db.find_all_vinkit()
         for vinkki in vinkit:
-            self.io.write(f'id: {vinkki.id} \n{vinkki}\n')
-
+            self.io.write(f'id: {vinkki.id} {vinkki}\n')
