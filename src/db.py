@@ -1,12 +1,13 @@
 from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import KirjaVinkki, Kurssi
+from models import KirjaVinkki, Kurssi, VideoVinkki
+from vinkkityyppi import VinkkiTyyppi
 
 
 class DataBase:
     def __init__(self, db_name: str, base):
-        self.engine = create_engine('sqlite:///' + db_name + ".db")
+        self.engine = create_engine('sqlite:///' + db_name + ".db", echo=True)
         session = sessionmaker(bind=self.engine)
         self.session = session()
         base.metadata.create_all(self.engine)
@@ -16,14 +17,22 @@ class DataBase:
         self.session.add(kirja)
         self.session.commit()
 
+    def add_video_vinkki_to_db(self, kirja: VideoVinkki):
+        """Lisää videovinkki tietokantaan."""
+        self.session.add(kirja)
+        self.session.commit()
+
     def add_course_to_vinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
 
-    def find_all_vinkit(self) -> List[KirjaVinkki]:
+    def find_all_vinkit(self) -> List:
         """Hakee kaikki kirjavinkit tietokannasta, ja palauttaa ne listana."""
-        return self.session.query(KirjaVinkki).all()
+        kaikki_vinkit = []
+        kaikki_vinkit.extend(self.session.query(KirjaVinkki).all())
+        kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
+        return kaikki_vinkit
 
     def delete_vinkki_with_id(self, vinkin_id: int):
         """Poistaa vinkin id perusteella"""
@@ -34,11 +43,10 @@ class DataBase:
 
         return False
 
-    def query_with_id(self, vinkin_id: int):
+    def query_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Hakee vinkin id perusteella"""
-        query_result = self.session.query(KirjaVinkki).get(vinkin_id)
-
-        if query_result is not None:
+        if (vinkin_tyyppi.KIRJA):
             return self.session.query(KirjaVinkki).get(vinkin_id)
-
-        return False
+        elif(vinkin_tyyppi.VIDEO):
+            return self.session.query(VideoVinkki).get(vinkin_id)
+        return None

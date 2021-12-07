@@ -55,7 +55,7 @@ class Ui:
         vinkit = self.db.find_all_vinkit()
         self.io.write('Tallennetut lukuvinkit:\n')
         for vinkki in vinkit:
-            self.io.write(f'{vinkki}\n')
+            self.io.write(f'{str(vinkki)}\n')
 
     def delete_vinkki(self):
         self.io.write('Anna poistettavan vinkin id:\n')
