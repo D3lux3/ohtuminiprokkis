@@ -8,7 +8,12 @@
 
 ### Definition of Done
 
-Valmis ohjelmisto tarkoittaa sitä, että määritelty vaatimus on analysoitu, suunniteltu, ohjelmoitu, testattu, dokumentoitu, integroitu muuhun ja viety tuotantoympäristöön.
+Valmiissa ohjelmistossa määritellyt vaatimukset on analysoitu, suunniteltu, ohjelmoitu, testattu, dokumentoitu, integroitu muuhun ohjelmaan ja se on viety tuotantoympäristöön.
+- user storyt testattu monipuolisesti
+- ohjelma läpäisee CI:n, testikattavuus vähintään 70 %
+- koodi on selkeää ja ylläpidettävää
+- koodi on yhtenäistä ja noudattaa pylintissä määriteltyä tyyliä
+- product backlog ja sprint backlog ovat ajan tasalla
 
 Ohjelma on analysoitu sekä suunniteltu ryhmässä ennen ensimmäistä sprinttiä. Sen jälkeen ohjelmasta on ohjelmoitu minimum viable product eli MVP, mikä on dokumentoitu DocString periaatteiden mukaisesti. Ohjelmaan on myös toteutettu testejä.
 
