@@ -1,4 +1,4 @@
-from models import base
+from models import VideoVinkki, base
 from ui.ui import Ui
 from ui.io import Io
 from db import DataBase
