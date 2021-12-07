@@ -12,6 +12,8 @@ Valmis ohjelmisto tarkoittaa sitä, että määritelty vaatimus on analysoitu, s
 
 Ohjelma on analysoitu sekä suunniteltu ryhmässä ennen ensimmäistä sprinttiä. Sen jälkeen ohjelmasta on ohjelmoitu minimum viable product eli MVP, mikä on dokumentoitu DocString periaatteiden mukaisesti. Ohjelmaan on myös toteutettu testejä.
 
+### Tällä hetkellä
+
 - Ohjelmassa on tietokantayhteys.
 - Lukuvinkki tallentuu tietokantaan.
 - Ohjelmassa on tekstipohjainen komentorivikäyttöliittymä lukuvinkin lisäystä varten.
