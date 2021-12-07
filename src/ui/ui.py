@@ -1,10 +1,13 @@
 from models import KirjaVinkki
 
 
+
+
 class Ui:
-    def __init__(self, io, db):
+    def __init__(self, io, db, random_int):
         self.io = io
         self.db = db
+        self.number_generator = random_int
 
 
     def start(self):
@@ -17,19 +20,22 @@ class Ui:
             self.io.write('1: Listaa lukuvinkit')
             self.io.write('2: Lisää lukuvinkki')
             self.io.write('3: Poista lukuvinkki')
-            self.io.write('4: Lopeta')
+            self.io.write('4: Valitse satunnainen lukuvinkki')
+            self.io.write('5: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
             print()
 
             if user_input == 1:
                 self.print_vinkit()
-            if user_input == 2:
+            elif user_input == 2:
                 otsikko = self.io.read_input('Vinkin otsikko: ')
                 kommentti = self.io.read_input('Kommentti: ')
                 self.add_new(otsikko, kommentti)
-            if user_input == 3:
+            elif user_input == 3:
                 self.delete_vinkki()
-            if user_input == 4:
+            elif user_input == 4:
+                self.random_vinkki()
+            elif user_input == 5:
                 self.io.write('Kiitos ja näkemiin!')
                 break
             print()
@@ -39,7 +45,7 @@ class Ui:
             user_input = int(command)
             return user_input
         except ValueError:
-            self.io.write('Anna kelvollinen komento')
+            return self.io.write('Anna kelvollinen komento')
 
     def add_new(self, otsikko, kommentti):
         vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
@@ -66,3 +72,11 @@ class Ui:
         vinkit = self.db.find_all_vinkit()
         for vinkki in vinkit:
             self.io.write(f'id: {vinkki.id} {vinkki}\n')
+
+    def random_vinkki(self):
+        vinkit = self.db.find_all_vinkit()
+        random_number = self.number_generator(len(vinkit)-1)
+        print(vinkit)
+        vinkki = vinkit[random_number]
+        print(vinkki)
+        self.io.write(vinkki)
