@@ -14,9 +14,26 @@ kirjavinkki_courses = Table('kirjavinkki_courses', base.metadata,
 
 videovinkki_courses = Table('videovinkki_courses', base.metadata,
      Column('id', Integer, primary_key=True),
-     Column('videovinkki_id', ForeignKey('videovinkit.id')),
-     Column('kurssi_id', ForeignKey('kurssit.id'))
+     Column('videovinkki1_id', ForeignKey('videovinkit.id')),
+     Column('kurssi1_id', ForeignKey('kurssit.id'))
  )
+
+kirjavinkki_tagit = Table('kirjavinkki_tagit', base.metadata, 
+        Column('id', Integer, primary_key=True),
+        Column('kirjavinkki2_id',ForeignKey('kirjavinkit.id')),
+        Column('tagi2_id', ForeignKey('tagit.id')))
+
+videovinkki_tagit = Table('videovinkki_tagit', base.metadata,
+        Column('id', Integer, primary_key=True),
+        Column('videovinkki_id',ForeignKey('videovinkit.id')),
+        Column('tagi_id', ForeignKey('tagit.id')))
+
+class Tagi(base):
+    __tablename__= 'tagit'
+    id = Column(Integer, primary_key= True)
+    nimi = Column(String, nullable= false)
+    def __str__(self) -> str:
+        return self.nimi
 
 class Kurssi(base):
     __tablename__= 'kurssit'
@@ -27,13 +44,16 @@ class Kurssi(base):
 
 class KirjaVinkki(base):
     __tablename__ = 'kirjavinkit'
+    related_courses = relationship(
+        'Kurssi', secondary=kirjavinkki_courses, backref='kirjavinkit')
+    related_tags = relationship(
+        'Tagi', secondary=kirjavinkki_tagit, backref='kirjavinkit')
     id = Column(Integer, primary_key=True)
     otsikko = Column(String, nullable= false)
     kirjoittaja = Column(String)
     isbn = Column(String)
     tyyppi = Column(String, nullable= false, default="Kirja")
     kommentti = Column(String, nullable= false)
-    related_courses = relationship('Kurssi', secondary=kirjavinkki_courses, backref='vinkit')
     luettu = Column(Boolean, nullable= false, default=False)
 
 
@@ -46,8 +66,13 @@ class KirjaVinkki(base):
         for kurssi in kurssit:
             kurssit_listana.append(kurssi.nimi)
         kurssit_str = ' ,'.join(kurssit_listana)
+        tagit = self.related_tags
+        tagit_listana = []
+        for tagi in tagit:
+            tagit_listana.append(tagi.nimi)
+        tagit_str = ','.join(tagit_listana)
 
-        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu}'
+        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu} \nTagit: {tagit_str}'
 
 
 class VideoVinkki(base):
@@ -58,6 +83,7 @@ class VideoVinkki(base):
     tyyppi = Column(String, nullable= false, default="Video")
     kommentti = Column(String, nullable= false)
     related_courses = relationship('Kurssi', secondary=videovinkki_courses, backref='kurssit')
+    related_tags = relationship('Tagi', secondary = videovinkki_tagit, backref='videovinkit')
     luettu = Column(Boolean, nullable= false, default=False)
 
     def add_related_course(self, kurssi: Kurssi):
@@ -71,3 +97,6 @@ class VideoVinkki(base):
         kurssit_str = ' ,'.join(kurssit_listana)
 
         return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi} \nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
+
+
+

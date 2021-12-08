@@ -76,7 +76,5 @@ class Ui:
     def random_vinkki(self):
         vinkit = self.db.find_all_vinkit()
         random_number = self.number_generator(len(vinkit)-1)
-        print(vinkit)
         vinkki = vinkit[random_number]
-        print(vinkki)
         self.io.write(vinkki)

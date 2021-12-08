@@ -1,9 +1,8 @@
 from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import KirjaVinkki, Kurssi, VideoVinkki
+from models import KirjaVinkki, Kurssi, VideoVinkki, Tagi
 from vinkkityyppi import VinkkiTyyppi
-
 
 class DataBase:
     def __init__(self, db_name: str, base):
@@ -25,6 +24,11 @@ class DataBase:
     def add_course_to_vinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
+        self.session.commit()
+
+    def add_tag_to_vinkki(self, vinkin_id: int, tagi: Tagi):
+        vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
+        vinkki.related_tags.append(tagi)
         self.session.commit()
 
     def find_all_vinkit(self) -> List:
@@ -50,3 +54,8 @@ class DataBase:
         elif(vinkin_tyyppi.VIDEO):
             return self.session.query(VideoVinkki).get(vinkin_id)
         return None
+
+
+
+
+
