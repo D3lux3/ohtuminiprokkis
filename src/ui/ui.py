@@ -57,9 +57,9 @@ class Ui:
         isbn = input('Kirjan isbn-koodi: ')
         vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
         self.db.add_vinkki_to_db(kirja = vinkki)
-        vinkki_id = self.db.find_all_vinkit()[-1].id
+        vinkki_id = vinkki.id
         self.add_tags(vinkki_id)
-        self.add_courses(vinkki_id)
+        self.add_courses_kirja(vinkki_id)
 
     def add_new_videovinkki(self):
         otsikko = input('Vinkin otsikko: ')
@@ -67,8 +67,8 @@ class Ui:
         kommentti = input('Vinkin kommentti: ')
         vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
         self.db.add_video_vinkki_to_db(kirja = vinkki)
-        vinkki_id = self.db.find_all_vinkit()[-1].id
-        self.add_courses(vinkki_id)
+        vinkki_id = vinkki.id
+        self.add_courses_video(vinkki_id)
                 
     def add_tags(self, vinkki_id):
         while True:
@@ -79,12 +79,21 @@ class Ui:
             elif valinta == 2:
                 break
 
-    def add_courses(self, vinkki_id):
+    def add_courses_kirja(self, vinkki_id):
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
                 teksti = input("Kurssin nimi: ")
-                self.db.add_course_to_vinkki(vinkki_id, Kurssi(nimi = teksti))
+                self.db.add_course_to_kirjavinkki(vinkki_id, Kurssi(nimi = teksti))
+            elif valinta == 2:
+                break
+
+    def add_courses_video(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = input("Kurssin nimi: ")
+                self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
 

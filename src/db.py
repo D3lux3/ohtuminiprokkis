@@ -21,8 +21,13 @@ class DataBase:
         self.session.add(kirja)
         self.session.commit()
 
-    def add_course_to_vinkki(self, vinkin_id: int, kurssi: Kurssi):
+    def add_course_to_kirjavinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
+        vinkki.related_courses.append(kurssi)
+        self.session.commit()
+        
+    def add_course_to_videovinkki(self, vinkin_id: int, kurssi: Kurssi):
+        vinkki = self.session.query(VideoVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
 
