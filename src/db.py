@@ -6,7 +6,7 @@ from vinkkityyppi import VinkkiTyyppi
 
 class DataBase:
     def __init__(self, db_name: str, base):
-        self.engine = create_engine('sqlite:///' + db_name + ".db", echo=True)
+        self.engine = create_engine('sqlite:///' + db_name + ".db")#, echo=True)
         session = sessionmaker(bind=self.engine)
         self.session = session()
         base.metadata.create_all(self.engine)
@@ -43,10 +43,11 @@ class DataBase:
         kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
         return kaikki_vinkit
 
-    def delete_vinkki_with_id(self, vinkin_id: int):
+    def delete_vinkki_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Poistaa vinkin id perusteella"""
-        if self.query_with_id(vinkin_id) is not False:
-            self.session.delete(self.query_with_id(vinkin_id))
+        query_result = self.query_with_id(vinkin_id, vinkin_tyyppi)
+        if query_result is not None:
+            self.session.delete(query_result)
             self.session.commit()
             return True
 
@@ -54,13 +55,9 @@ class DataBase:
 
     def query_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Hakee vinkin id perusteella"""
-        if (vinkin_tyyppi.KIRJA):
-            return self.session.query(KirjaVinkki).get(vinkin_id)
-        elif(vinkin_tyyppi.VIDEO):
-            return self.session.query(VideoVinkki).get(vinkin_id)
-        return None
-
-
-
-
-
+        query_result = None
+        if vinkin_tyyppi == VinkkiTyyppi.KIRJA:
+            query_result = self.session.query(KirjaVinkki).get(vinkin_id)
+        elif vinkin_tyyppi == VinkkiTyyppi.VIDEO:
+            query_result = self.session.query(VideoVinkki).get(vinkin_id)
+        return query_result

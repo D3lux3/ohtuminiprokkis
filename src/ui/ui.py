@@ -1,6 +1,5 @@
 from models import KirjaVinkki, VideoVinkki, Kurssi, Tagi
-
-
+from vinkkityyppi import VinkkiTyyppi
 
 
 class Ui:
@@ -104,15 +103,34 @@ class Ui:
             self.io.write(f'{str(vinkki)}\n')
 
     def delete_vinkki(self):
+        tyyppi = self.ask_for_tyyppi()
+
+        if tyyppi is None:
+            self.io.write('Tyyppiä ei löydy')
+            return
+
         self.io.write('Anna poistettavan vinkin id:\n')
         self.print_vinkit_with_id()
         user_input = self.process_command(self.io.read_input('Poistettavan vinkin id: '))
 
-        if isinstance(user_input, int):
-            if self.db.delete_vinkki_with_id(user_input):
-                self.io.write(f'Vinkki id {user_input} poistettu')
+        if isinstance(user_input, int):# and tyyppi is not None:
+            if self.db.delete_vinkki_with_id(user_input, tyyppi):
+                self.io.write(f'Vinkki tyyppiä {tyyppi}, id {user_input} poistettu')
             else:
                 self.io.write('Vinkin poistaminen epäonnistui')
+
+    def ask_for_tyyppi(self):
+        self.io.write('Valitse vinkin tyyppi:')
+        self.io.write('1: Kirja')
+        self.io.write('2: Video')
+
+        tyyppi = None
+        user_input = self.process_command(self.io.read_input('> '))
+        if user_input == 1:
+            tyyppi = VinkkiTyyppi.KIRJA
+        elif user_input == 2:
+            tyyppi = VinkkiTyyppi.VIDEO
+        return tyyppi
 
     def print_vinkit_with_id(self):
         vinkit = self.db.find_all_vinkit()
