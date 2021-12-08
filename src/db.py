@@ -36,8 +36,9 @@ class DataBase:
 
     def delete_vinkki_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Poistaa vinkin id perusteella"""
-        if self.query_with_id(vinkin_id, vinkin_tyyppi) is not None:
-            self.session.delete(self.query_with_id(vinkin_id, vinkin_tyyppi))
+        query_result = self.query_with_id(vinkin_id, vinkin_tyyppi)
+        if query_result is not None:
+            self.session.delete(query_result)
             self.session.commit()
             return True
 
@@ -46,8 +47,8 @@ class DataBase:
     def query_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Hakee vinkin id perusteella"""
         query_result = None
-        if (vinkin_tyyppi.KIRJA):
+        if vinkin_tyyppi == VinkkiTyyppi.KIRJA:
             query_result = self.session.query(KirjaVinkki).get(vinkin_id)
-        elif(vinkin_tyyppi.VIDEO):
+        elif vinkin_tyyppi == VinkkiTyyppi.VIDEO:
             query_result = self.session.query(VideoVinkki).get(vinkin_id)
         return query_result
