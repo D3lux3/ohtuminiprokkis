@@ -1,4 +1,4 @@
-from models import KirjaVinkki
+from models import KirjaVinkki, VideoVinkki, Kurssi
 
 
 
@@ -28,9 +28,13 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                otsikko = self.io.read_input('Vinkin otsikko: ')
-                kommentti = self.io.read_input('Kommentti: ')
-                self.add_new(otsikko, kommentti)
+                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+
+                if tyyppi == 1:
+                    self.add_new_kirjavinkki()
+                elif tyyppi == 2:
+                    self.add_new_videovinkki()
             elif user_input == 3:
                 self.delete_vinkki()
             elif user_input == 4:
@@ -47,9 +51,19 @@ class Ui:
         except ValueError:
             return self.io.write('Anna kelvollinen komento')
 
-    def add_new(self, otsikko, kommentti):
-        vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
+    def add_new_kirjavinkki(self):
+        kirjoittaja = input('Vinkin kirjoittaja: ')
+        otsikko = input('Vinkin otsikko: ')
+        isbn = input('Kirjan isbn-koodi: ')
+        vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
         self.db.add_vinkki_to_db(kirja = vinkki)
+
+    def add_new_videovinkki(self):
+        otsikko = input('Vinkin otsikko: ')
+        url = input('Videon url-osoite: ')
+        kommentti = input('Vinkin kommentti: ')
+        vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
+        self.db.add_video_vinkki_to_db(kirja = vinkki)
 
     def print_vinkit(self):
         vinkit = self.db.find_all_vinkit()
