@@ -7,7 +7,7 @@ from vinkkityyppi import VinkkiTyyppi
 
 class DataBase:
     def __init__(self, db_name: str, base):
-        self.engine = create_engine('sqlite:///' + db_name + ".db", echo=True)
+        self.engine = create_engine('sqlite:///' + db_name + ".db")#, echo=True)
         session = sessionmaker(bind=self.engine)
         self.session = session()
         base.metadata.create_all(self.engine)
