@@ -1,5 +1,6 @@
-from models import KirjaVinkki
+from models import KirjaVinkki, VideoVinkki, Kurssi, Tagi
 from vinkkityyppi import VinkkiTyyppi
+
 
 class Ui:
     def __init__(self, io, db, random_int):
@@ -26,9 +27,13 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                otsikko = self.io.read_input('Vinkin otsikko: ')
-                kommentti = self.io.read_input('Kommentti: ')
-                self.add_new(otsikko, kommentti)
+                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+
+                if tyyppi == 1:
+                    self.add_new_kirjavinkki()
+                elif tyyppi == 2:
+                    self.add_new_videovinkki()
             elif user_input == 3:
                 self.delete_vinkki()
             elif user_input == 4:
@@ -45,9 +50,51 @@ class Ui:
         except ValueError:
             return self.io.write('Anna kelvollinen komento')
 
-    def add_new(self, otsikko, kommentti):
-        vinkki = KirjaVinkki(otsikko = otsikko, kommentti = kommentti)
+    def add_new_kirjavinkki(self):
+        kirjoittaja = input('Vinkin kirjoittaja: ')
+        otsikko = input('Vinkin otsikko: ')
+        isbn = input('Kirjan isbn-koodi: ')
+        vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
         self.db.add_vinkki_to_db(kirja = vinkki)
+        vinkki_id = vinkki.id
+        self.add_tags(vinkki_id)
+        self.add_courses_kirja(vinkki_id)
+
+    def add_new_videovinkki(self):
+        otsikko = input('Vinkin otsikko: ')
+        url = input('Videon url-osoite: ')
+        kommentti = input('Vinkin kommentti: ')
+        vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
+        self.db.add_video_vinkki_to_db(kirja = vinkki)
+        vinkki_id = vinkki.id
+        self.add_courses_video(vinkki_id)
+                
+    def add_tags(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = input("Tagi: ")
+                self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
+            elif valinta == 2:
+                break
+
+    def add_courses_kirja(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = input("Kurssin nimi: ")
+                self.db.add_course_to_kirjavinkki(vinkki_id, Kurssi(nimi = teksti))
+            elif valinta == 2:
+                break
+
+    def add_courses_video(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = input("Kurssin nimi: ")
+                self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
+            elif valinta == 2:
+                break
 
     def print_vinkit(self):
         vinkit = self.db.find_all_vinkit()
