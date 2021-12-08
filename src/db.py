@@ -45,8 +45,9 @@ class DataBase:
 
     def query_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Hakee vinkin id perusteella"""
+        query_result = None
         if (vinkin_tyyppi.KIRJA):
-            return self.session.query(KirjaVinkki).get(vinkin_id)
+            query_result = self.session.query(KirjaVinkki).get(vinkin_id)
         elif(vinkin_tyyppi.VIDEO):
-            return self.session.query(VideoVinkki).get(vinkin_id)
-        return None
+            query_result = self.session.query(VideoVinkki).get(vinkin_id)
+        return query_result
