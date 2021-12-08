@@ -56,9 +56,9 @@ class Testdb(unittest.TestCase):
     # vinkkien poisto
     def test_delete_vinkki_removes_vinkki(self):
         self.tmp_db.add_vinkki_to_db(self.vinkki)
-        #removed = self.tmp_db.delete_vinkki_with_id(1)
+        #self.tmp_db.delete_vinkki_with_id(1)
         #query_result = self.tmp_db.session.query(KirjaVinkki).all()
-#
+
         #self.assertTrue(removed)
         #self.assertEqual(len(query_result), 0)
 
