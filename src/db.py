@@ -34,10 +34,10 @@ class DataBase:
         kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
         return kaikki_vinkit
 
-    def delete_vinkki_with_id(self, vinkin_id: int):
+    def delete_vinkki_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Poistaa vinkin id perusteella"""
-        if self.query_with_id(vinkin_id) is not False:
-            self.session.delete(self.query_with_id(vinkin_id))
+        if self.query_with_id(vinkin_id, vinkin_tyyppi) is not None:
+            self.session.delete(self.query_with_id(vinkin_id, vinkin_tyyppi))
             self.session.commit()
             return True
 
