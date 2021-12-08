@@ -78,15 +78,6 @@ class Testdb(unittest.TestCase):
     # ei toimi
     def test_deleting_kirjavinkki_deletes_its_related_courses(self):
         pass
-        #self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
-        #self.kirjavinkki.add_related_course(self.kurssi)
-        #self.tmp_db.delete_vinkki_with_id(1, VinkkiTyyppi.KIRJA)
-        #query_kirja = self.tmp_db.session.query(KirjaVinkki).all()
-        #query_kurssi = self.tmp_db.session.query(Kurssi).all()
-
-        #self.assertEqual(len(query_kirja), 0)
-        #print(query_kurssi[0])
-        #self.assertEqual(len(query_kurssi), 0)
 
     def test_deleting_vinkki_with_nonexistend_id_doesnt_change_db(self):
         pass
