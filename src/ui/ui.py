@@ -139,6 +139,8 @@ class Ui:
 
     def random_vinkki(self):
         vinkit = self.db.find_all_vinkit()
+        if len(vinkit) == 0:
+            return
         random_number = self.number_generator(len(vinkit)-1)
         vinkki = vinkit[random_number]
         self.io.write(vinkki)
