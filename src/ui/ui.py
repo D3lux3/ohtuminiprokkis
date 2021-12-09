@@ -51,9 +51,9 @@ class Ui:
             return self.io.write('Anna kelvollinen komento')
 
     def add_new_kirjavinkki(self):
-        kirjoittaja = input('Vinkin kirjoittaja: ')
-        otsikko = input('Vinkin otsikko: ')
-        isbn = input('Kirjan isbn-koodi: ')
+        kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
+        otsikko = self.io.read_input('Vinkin otsikko: ')
+        isbn = self.io.read_input('Kirjan isbn-koodi: ')
         vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
         self.db.add_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
