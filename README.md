@@ -76,3 +76,6 @@ Coverage raportti saadaan komennolla:
 coverage run --branch -m pytest; coverage html
 ```
 
+Tämän hetkinen testikattavuus:
+<img width="843" alt="Näyttökuva 2021-12-9 kello 14 15 08" src="https://user-images.githubusercontent.com/75832352/145394695-9b04ce98-dd38-4f03-9819-84868367cd14.png">
+
