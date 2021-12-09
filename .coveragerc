@@ -1,3 +1,3 @@
 [run]
 source = src
-omit = src/tests/**,src/main.py 
+omit = src/tests/**,src/main.py,src/random_generator.py
