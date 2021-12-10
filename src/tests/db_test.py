@@ -52,7 +52,7 @@ class Testdb(unittest.TestCase):
     # viitteen lisäys vinkille
     def test_course_can_be_added_to_kirjavinkki(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
-        self.kirjavinkki.add_related_course(self.kurssi)
+        self.tmp_db.add_course_to_kirjavinkki(self.kirjavinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(KirjaVinkki).all()
         kurssit = query_result[0].related_courses
 
