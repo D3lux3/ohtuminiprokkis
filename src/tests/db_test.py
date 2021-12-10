@@ -1,7 +1,7 @@
 import os
 import unittest
 from db import DataBase
-from models import KirjaVinkki, Kurssi, VideoVinkki, base
+from models import KirjaVinkki, Kurssi, VideoVinkki, Tagi, base
 from vinkkityyppi import VinkkiTyyppi
 
 class Testdb(unittest.TestCase):
@@ -11,6 +11,7 @@ class Testdb(unittest.TestCase):
         self.kirjavinkki = KirjaVinkki(otsikko = "Pro Git Book", kommentti = "Very cool")
         self.videovinkki = VideoVinkki(otsikko = "New video vinkki", url = "www.newvinkki.com", kommentti = "Very good kommentti")
         self.kurssi = Kurssi(nimi = "TKT20006 Ohjelmistotuotanto")
+        self.tagi = Tagi(nimi = "tag1")
 
     def test_there_are_no_vinkit_in_the_beginning(self):
         query_result = self.tmp_db.session.query(KirjaVinkki).all()
@@ -67,6 +68,15 @@ class Testdb(unittest.TestCase):
 
         self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
         self.assertEqual(len(kurssit), 1)
+
+    def test_tag_can_be_added_to_vinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.tmp_db.add_tag_to_vinkki(self.kirjavinkki.id, self.tagi)
+        query_result = self.tmp_db.session.query(KirjaVinkki).all()
+        tagi = query_result[0].related_tags
+
+        self.assertEqual(tagi[0].nimi, self.tagi.nimi)
+        self.assertEqual(len(tagi), 1)
 
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
