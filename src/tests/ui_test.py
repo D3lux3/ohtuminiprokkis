@@ -26,6 +26,10 @@ class TestUi(unittest.TestCase):
     def test_legal_input_command(self):
         self.stub_ui.process_command(1)
         self.assertEqual(len(self.io.outputs), 0)
+    
+    def test_illegal_input_command(self):
+        self.stub_ui.process_command("illegal command")
+        self.assertEqual(self.io.outputs[0], "Anna kelvollinen komento")
 
     def test_add_new_kirjavinkki_calls_db_add_vinkki_to_db(self):
         self.io = Stub_io(["2", "1", "Unknown", "Pro Git Book", "0123456789", "2", "2", "5"])
