@@ -1,7 +1,7 @@
 import os
 import unittest
 from db import DataBase
-from models import KirjaVinkki, Kurssi, VideoVinkki, base
+from models import KirjaVinkki, Kurssi, VideoVinkki, Tagi, base
 from vinkkityyppi import VinkkiTyyppi
 
 class Testdb(unittest.TestCase):
@@ -9,8 +9,9 @@ class Testdb(unittest.TestCase):
     def setUp(self):
         self.tmp_db = DataBase("tmp123db", base)
         self.kirjavinkki = KirjaVinkki(otsikko = "Pro Git Book", kommentti = "Very cool")
-        self.videovinkki = VideoVinkki()
+        self.videovinkki = VideoVinkki(otsikko = "New video vinkki", url = "www.newvinkki.com", kommentti = "Very good kommentti")
         self.kurssi = Kurssi(nimi = "TKT20006 Ohjelmistotuotanto")
+        self.tagi = Tagi(nimi = "tag1")
 
     def test_there_are_no_vinkit_in_the_beginning(self):
         query_result = self.tmp_db.session.query(KirjaVinkki).all()
@@ -36,17 +37,46 @@ class Testdb(unittest.TestCase):
         self.assertFalse(self.kirjavinkki.luettu)
 
     def test_adding_adds_correct_videovinkki_to_db(self):
-        pass
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
+        result = self.tmp_db.find_all_vinkit()
+        query_result = self.tmp_db.session.query(VideoVinkki).all()
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(query_result[0].otsikko, self.videovinkki.otsikko)
+        self.assertEqual(query_result[0].tyyppi, self.videovinkki.tyyppi)
+        self.assertEqual(query_result[0].url, self.videovinkki.url)
+        self.assertEqual(query_result[0].kommentti, self.videovinkki.kommentti)
+        self.assertEqual(len(query_result[0].related_courses), 0)
+        self.assertEqual(query_result[0].luettu, self.videovinkki.luettu)
+        self.assertFalse(query_result[0].luettu, self.videovinkki.luettu)
 
     # viitteen lisäys vinkille
     def test_course_can_be_added_to_kirjavinkki(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
-        self.kirjavinkki.add_related_course(self.kurssi)
+        self.tmp_db.add_course_to_kirjavinkki(self.kirjavinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(KirjaVinkki).all()
         kurssit = query_result[0].related_courses
 
         self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
         self.assertEqual(len(kurssit), 1)
+    
+    def test_course_can_be_added_to_videovinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.videovinkki)
+        self.tmp_db.add_course_to_videovinkki(self.videovinkki.id, self.kurssi)
+        query_result = self.tmp_db.session.query(VideoVinkki).all()
+        kurssit = query_result[0].related_courses
+
+        self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
+        self.assertEqual(len(kurssit), 1)
+
+    def test_tag_can_be_added_to_vinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.tmp_db.add_tag_to_vinkki(self.kirjavinkki.id, self.tagi)
+        query_result = self.tmp_db.session.query(KirjaVinkki).all()
+        tagi = query_result[0].related_tags
+
+        self.assertEqual(tagi[0].nimi, self.tagi.nimi)
+        self.assertEqual(len(tagi), 1)
 
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
