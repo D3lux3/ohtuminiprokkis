@@ -51,9 +51,9 @@ class Ui:
             return self.io.write('Anna kelvollinen komento')
 
     def add_new_kirjavinkki(self):
-        kirjoittaja = input('Vinkin kirjoittaja: ')
-        otsikko = input('Vinkin otsikko: ')
-        isbn = input('Kirjan isbn-koodi: ')
+        kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
+        otsikko = self.io.read_input('Vinkin otsikko: ')
+        isbn = self.io.read_input('Kirjan isbn-koodi: ')
         vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
         self.db.add_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
@@ -61,9 +61,9 @@ class Ui:
         self.add_courses_kirja(vinkki_id)
 
     def add_new_videovinkki(self):
-        otsikko = input('Vinkin otsikko: ')
-        url = input('Videon url-osoite: ')
-        kommentti = input('Vinkin kommentti: ')
+        otsikko = self.io.read_input('Vinkin otsikko: ')
+        url = self.io.read_input('Videon url-osoite: ')
+        kommentti = self.io.read_input('Vinkin kommentti: ')
         vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
         self.db.add_video_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
@@ -73,7 +73,7 @@ class Ui:
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
-                teksti = input("Tagi: ")
+                teksti = self.io.read_input("Tagi: ")
                 self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
@@ -82,7 +82,7 @@ class Ui:
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
-                teksti = input("Kurssin nimi: ")
+                teksti = self.io.read_input("Kurssin nimi: ")
                 self.db.add_course_to_kirjavinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
@@ -91,7 +91,7 @@ class Ui:
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
-                teksti = input("Kurssin nimi: ")
+                teksti = self.io.read_input("Kurssin nimi: ")
                 self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
