@@ -58,6 +58,15 @@ class Testdb(unittest.TestCase):
 
         self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
         self.assertEqual(len(kurssit), 1)
+    
+    def test_course_can_be_added_to_videovinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.videovinkki)
+        self.tmp_db.add_course_to_videovinkki(self.videovinkki.id, self.kurssi)
+        query_result = self.tmp_db.session.query(VideoVinkki).all()
+        kurssit = query_result[0].related_courses
+
+        self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
+        self.assertEqual(len(kurssit), 1)
 
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
