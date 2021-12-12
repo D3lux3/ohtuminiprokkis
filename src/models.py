@@ -10,23 +10,37 @@ kirjavinkki_courses = Table('kirjavinkki_courses', base.metadata,
      Column('id', Integer, primary_key=True),
      Column('kirjavinkki_id', ForeignKey('kirjavinkit.id')),
      Column('kurssi_id', ForeignKey('kurssit.id'))
- )
+)
 
 videovinkki_courses = Table('videovinkki_courses', base.metadata,
      Column('id', Integer, primary_key=True),
      Column('videovinkki1_id', ForeignKey('videovinkit.id')),
      Column('kurssi1_id', ForeignKey('kurssit.id'))
- )
+)
+
+podcastvinkki_courses = Table('podcastvinkki_courses', base.metadata,
+     Column('id', Integer, primary_key=True),
+     Column('podcastvinkki_id', ForeignKey('podcastvinkit.id')),
+     Column('kurssi_id', ForeignKey('kurssit.id'))
+)
 
 kirjavinkki_tagit = Table('kirjavinkki_tagit', base.metadata, 
         Column('id', Integer, primary_key=True),
         Column('kirjavinkki2_id',ForeignKey('kirjavinkit.id')),
-        Column('tagi2_id', ForeignKey('tagit.id')))
+        Column('tagi2_id', ForeignKey('tagit.id'))
+)
 
 videovinkki_tagit = Table('videovinkki_tagit', base.metadata,
         Column('id', Integer, primary_key=True),
         Column('videovinkki_id',ForeignKey('videovinkit.id')),
-        Column('tagi_id', ForeignKey('tagit.id')))
+        Column('tagi_id', ForeignKey('tagit.id'))
+)
+
+podcastvinkki_tagit = Table('podcastvinkki_tagit', base.metadata,
+        Column('id', Integer, primary_key=True),
+        Column('podcastvinkki_id',ForeignKey('podcastvinkit.id')),
+        Column('tagi_id', ForeignKey('tagit.id'))
+)
 
 class Tagi(base):
     __tablename__= 'tagit'
