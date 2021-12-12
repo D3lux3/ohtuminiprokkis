@@ -112,5 +112,36 @@ class VideoVinkki(base):
 
         return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi} \nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
+class PodcastVinkki(base):
+    __tablename__ = 'podcastvinkit'
+    id = Column(Integer, primary_key=True)
+    author = Column(String, nullable=False)
+    nimi = Column(String, nullable=False)
+    otsikko = Column(String, nullable=False)
+    kuvaus = Column(String, nullable=False)
+    tyyppi = Column(String, nullable=False, default="Podcast")
+    related_tags = relationship(
+        'Tagi', secondary=podcastvinkki_tagit, backref='podcastvinkit')
+    related_courses = relationship(
+        'Kurssi', secondary=podcastvinkki_courses, backref='podcastvinkit')
+    luettu = Column(Boolean, nullable=False, default=False)
+
+
+    def add_related_course(self, kurssi: Kurssi):
+        self.related_courses.append(kurssi)
+
+    def __str__(self) -> str:
+        kurssit = self.related_courses
+        kurssit_listana = []
+        for kurssi in kurssit:
+            kurssit_listana.append(kurssi.nimi)
+        kurssit_str = ' ,'.join(kurssit_listana)
+        tagit = self.related_tags
+        tagit_listana = []
+        for tagi in tagit:
+            tagit_listana.append(tagi.nimi)
+        tagit_str = ','.join(tagit_listana)
+
+        return f'\Author: {self.author}\nPodcastin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKuvaus: {self.kuvaus}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
 
