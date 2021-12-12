@@ -22,18 +22,12 @@ class Ui:
             self.io.write('4: Valitse satunnainen lukuvinkki')
             self.io.write('5: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
+            
             print()
-
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
-                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
-
-                if tyyppi == 1:
-                    self.add_new_kirjavinkki()
-                elif tyyppi == 2:
-                    self.add_new_videovinkki()
+                select_vinkki_type()
             elif user_input == 3:
                 self.delete_vinkki()
             elif user_input == 4:
@@ -42,6 +36,15 @@ class Ui:
                 self.io.write('Kiitos ja näkemiin!')
                 break
             print()
+
+    def select_vinkki_type(self):
+        self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+        tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+
+        if tyyppi == 1:
+            self.add_new_kirjavinkki()
+        elif tyyppi == 2:
+            self.add_new_videovinkki()
 
     def process_command(self, command):
         try:
