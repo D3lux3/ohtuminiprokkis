@@ -22,7 +22,7 @@ class Ui:
             self.io.write('4: Valitse satunnainen lukuvinkki')
             self.io.write('5: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
-            print()
+            self.io.write('')
 
             if user_input == 1:
                 self.print_vinkit()
@@ -41,7 +41,7 @@ class Ui:
             elif user_input == 5:
                 self.io.write('Kiitos ja näkemiin!')
                 break
-            print()
+            self.io.write('')
 
     def process_command(self, command):
         try:
