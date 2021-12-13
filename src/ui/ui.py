@@ -27,13 +27,16 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
-                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+                #self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+                #tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+                tyyppi = self.ask_for_tyyppi()
 
-                if tyyppi == 1:
+                if tyyppi == VinkkiTyyppi.KIRJA:
                     self.add_new_kirjavinkki()
-                elif tyyppi == 2:
+                elif tyyppi == VinkkiTyyppi.VIDEO:
                     self.add_new_videovinkki()
+                elif tyyppi == VinkkiTyyppi.PODCAST:
+                    self.add_new_podcastvinkki()
             elif user_input == 3:
                 self.delete_vinkki()
             elif user_input == 4:
@@ -49,6 +52,9 @@ class Ui:
             return user_input
         except ValueError:
             return self.io.write('Anna kelvollinen komento')
+
+    def add_new_podcastvinkki(self):
+        self.io.write('ei tehä vielä mitään')
 
     def add_new_kirjavinkki(self):
         kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
@@ -123,13 +129,16 @@ class Ui:
         self.io.write('Valitse vinkin tyyppi:')
         self.io.write('1: Kirja')
         self.io.write('2: Video')
+        self.io.write('3: Podcast')
 
         tyyppi = None
-        user_input = self.process_command(self.io.read_input('> '))
+        user_input = self.process_command(self.io.read_input('Anna komento: '))
         if user_input == 1:
             tyyppi = VinkkiTyyppi.KIRJA
         elif user_input == 2:
             tyyppi = VinkkiTyyppi.VIDEO
+        elif user_input == 3:
+            tyyppi = VinkkiTyyppi.PODCAST
         return tyyppi
 
     def print_vinkit_with_id(self):
