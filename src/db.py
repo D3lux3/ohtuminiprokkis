@@ -71,4 +71,6 @@ class DataBase:
             query_result = self.session.query(KirjaVinkki).get(vinkin_id)
         elif vinkin_tyyppi == VinkkiTyyppi.VIDEO:
             query_result = self.session.query(VideoVinkki).get(vinkin_id)
+        elif vinkin_tyyppi == VinkkiTyyppi.PODCAST:
+            query_result = self.session.query(PodcastVinkki).get(vinkin_id)
         return query_result
