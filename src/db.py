@@ -55,7 +55,12 @@ class DataBase:
             return self.session.query(VideoVinkki).get(vinkin_id)
         return None
 
-
+    def search_vinkki_by_tag(self, tagin_id):
+        """Hakee vinkit tagin perusteella"""
+        tagi  = self.session.query(Tagi).get(tagin_id)
+        vinkit = []
+        vinkit.extend(tagi.kirjavinkit)
+        vinkit.extend(tagi.videovinkit)
 
 
 
