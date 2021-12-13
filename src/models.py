@@ -10,23 +10,37 @@ kirjavinkki_courses = Table('kirjavinkki_courses', base.metadata,
      Column('id', Integer, primary_key=True),
      Column('kirjavinkki_id', ForeignKey('kirjavinkit.id')),
      Column('kurssi_id', ForeignKey('kurssit.id'))
- )
+)
 
 videovinkki_courses = Table('videovinkki_courses', base.metadata,
      Column('id', Integer, primary_key=True),
      Column('videovinkki1_id', ForeignKey('videovinkit.id')),
      Column('kurssi1_id', ForeignKey('kurssit.id'))
- )
+)
+
+podcastvinkki_courses = Table('podcastvinkki_courses', base.metadata,
+     Column('id', Integer, primary_key=True),
+     Column('podcastvinkki_id', ForeignKey('podcastvinkit.id')),
+     Column('kurssi_id', ForeignKey('kurssit.id'))
+)
 
 kirjavinkki_tagit = Table('kirjavinkki_tagit', base.metadata, 
         Column('id', Integer, primary_key=True),
         Column('kirjavinkki2_id',ForeignKey('kirjavinkit.id')),
-        Column('tagi2_id', ForeignKey('tagit.id')))
+        Column('tagi2_id', ForeignKey('tagit.id'))
+)
 
 videovinkki_tagit = Table('videovinkki_tagit', base.metadata,
         Column('id', Integer, primary_key=True),
         Column('videovinkki_id',ForeignKey('videovinkit.id')),
-        Column('tagi_id', ForeignKey('tagit.id')))
+        Column('tagi_id', ForeignKey('tagit.id'))
+)
+
+podcastvinkki_tagit = Table('podcastvinkki_tagit', base.metadata,
+        Column('id', Integer, primary_key=True),
+        Column('podcastvinkki_id',ForeignKey('podcastvinkit.id')),
+        Column('tagi_id', ForeignKey('tagit.id'))
+)
 
 class Tagi(base):
     __tablename__= 'tagit'
@@ -98,5 +112,36 @@ class VideoVinkki(base):
 
         return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi} \nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
+class PodcastVinkki(base):
+    __tablename__ = 'podcastvinkit'
+    id = Column(Integer, primary_key=True)
+    author = Column(String, nullable=False)
+    nimi = Column(String, nullable=False)
+    otsikko = Column(String, nullable=False)
+    kuvaus = Column(String, nullable=False)
+    tyyppi = Column(String, nullable=False, default="Podcast")
+    related_tags = relationship(
+        'Tagi', secondary=podcastvinkki_tagit, backref='podcastvinkit')
+    related_courses = relationship(
+        'Kurssi', secondary=podcastvinkki_courses, backref='podcastvinkit')
+    luettu = Column(Boolean, nullable=False, default=False)
+
+
+    def add_related_course(self, kurssi: Kurssi):
+        self.related_courses.append(kurssi)
+
+    def __str__(self) -> str:
+        kurssit = self.related_courses
+        kurssit_listana = []
+        for kurssi in kurssit:
+            kurssit_listana.append(kurssi.nimi)
+        kurssit_str = ' ,'.join(kurssit_listana)
+        tagit = self.related_tags
+        tagit_listana = []
+        for tagi in tagit:
+            tagit_listana.append(tagi.nimi)
+        tagit_str = ','.join(tagit_listana)
+
+        return f'\nAuthor: {self.author}\nPodcastin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKuvaus: {self.kuvaus}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
 
