@@ -2,6 +2,7 @@ import os
 import unittest
 from db import DataBase
 from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, Tagi, base
+from models import kirjavinkki_courses, podcastvinkki_courses
 from vinkkityyppi import VinkkiTyyppi
 
 class Testdb(unittest.TestCase):
@@ -112,6 +113,22 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(query_result), 1)
         self.assertEqual(kurssi.nimi, self.kurssi.nimi)
 
+    def test_course_added_to_kirjavinkki_is_saved_to_kirjavinkki_courses(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.kirjavinkki.add_related_course(self.kurssi)
+        query_result = self.tmp_db.session.query(kirjavinkki_courses).all()
+
+        self.assertEqual(len(query_result), 1)
+        self.assertEqual(query_result[0], (1, self.kirjavinkki.id, self.kurssi.id))
+
+
+    def test_course_added_to_podcastvinkki_is_added_to_podcastvinkki_courses(self):
+        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
+        query_result = self.tmp_db.session.query(podcastvinkki_courses)
+
+        self.assertEqual(len(query_result), 1)
+
     # vinkkien poisto
     def test_delete_vinkki_removes_vinkki_with_correct_tyyppi(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
@@ -129,12 +146,19 @@ class Testdb(unittest.TestCase):
         self.assertFalse(removed)
         self.assertEqual(len(query_result), 1)
 
-    # ei toimi
-    def test_deleting_kirjavinkki_deletes_its_related_courses(self):
-        pass
+    def test_deleting_kirjavinkki_deletes_its_related_courses_from_kirjavinkki_courses(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.tmp_db.add_course_to_kirjavinkki(self.kirjavinkki.id, self.kurssi)
+        self.tmp_db.delete_vinkki_with_id(self.kirjavinkki.id, VinkkiTyyppi.KIRJA)
+        query_result = self.tmp_db.session.query(kirjavinkki_courses).all()
 
-    def test_deleting_vinkki_with_nonexistend_id_doesnt_change_db(self):
-        pass
+        self.assertEqual(len(query_result), 0)
+
+
+    def test_delete_vinkki_returns_false_when_given_incorrect_tyyppi(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        removed = self.tmp_db.delete_vinkki_with_id(1, None)
+        self.assertFalse(removed)
 
     # queryt
     def test_query_with_id_returns_correct_kirja_obect(self):
