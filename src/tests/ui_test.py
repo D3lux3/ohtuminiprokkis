@@ -59,5 +59,5 @@ class TestUi(unittest.TestCase):
         self.db_mock.find_all_vinkit.side_effect = find_all_vinkit
         self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
         self.stub_ui.start()
-        self.assertEqual(self.io.outputs[7].otsikko, "python-kirja")
+        self.assertEqual(self.io.outputs[8].otsikko, "python-kirja")
 
