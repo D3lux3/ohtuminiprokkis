@@ -84,6 +84,15 @@ class Testdb(unittest.TestCase):
         self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
         self.assertEqual(len(kurssit), 1)
 
+    def test_course_can_be_added_to_podcastvinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
+        query_result = self.tmp_db.session.query(PodcastVinkki).all()
+        kurssit = query_result[0].related_courses
+
+        self.assertEqual(kurssit[0].nimi, self.kurssi.nimi)
+        self.assertEqual(len(kurssit), 1)
+
     def test_tag_can_be_added_to_vinkki(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
         self.tmp_db.add_tag_to_vinkki(self.kirjavinkki.id, self.tagi)

@@ -133,7 +133,6 @@ class Ui:
         self.io.write('Anna poistettavan vinkin id:\n')
         self.print_vinkit_with_id()
         user_input = self.process_command(self.io.read_input('Poistettavan vinkin id: '))
-
         if isinstance(user_input, int):# and tyyppi is not None:
             if self.db.delete_vinkki_with_id(user_input, tyyppi):
                 self.io.write(f'Vinkki tyyppiä {tyyppi}, id {user_input} poistettu')
