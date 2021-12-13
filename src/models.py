@@ -142,6 +142,6 @@ class PodcastVinkki(base):
             tagit_listana.append(tagi.nimi)
         tagit_str = ','.join(tagit_listana)
 
-        return f'\Author: {self.author}\nPodcastin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKuvaus: {self.kuvaus}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
+        return f'\nAuthor: {self.author}\nPodcastin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKuvaus: {self.kuvaus}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
 
