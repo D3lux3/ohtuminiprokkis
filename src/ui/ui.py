@@ -104,6 +104,8 @@ class Ui:
                 self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_tags_podcastvinkki(self, vinkki_id: int):
         while True:
@@ -113,6 +115,8 @@ class Ui:
                 self.db.add_tag_to_podcastvinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_kirja(self, vinkki_id):
         while True:
@@ -122,6 +126,8 @@ class Ui:
                 self.db.add_course_to_kirjavinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_video(self, vinkki_id):
         while True:
@@ -131,6 +137,8 @@ class Ui:
                 self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_podcast(self, vinkki_id):
         while True:
@@ -140,6 +148,8 @@ class Ui:
                 self.db.add_course_to_podcastvinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def print_vinkit(self):
         vinkit = self.db.find_all_vinkit()
