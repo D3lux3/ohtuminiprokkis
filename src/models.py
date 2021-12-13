@@ -72,7 +72,7 @@ class KirjaVinkki(base):
             tagit_listana.append(tagi.nimi)
         tagit_str = ','.join(tagit_listana)
 
-        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu} \nTagit: {tagit_str}'
+        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu}\nTagit: {tagit_str}'
 
 
 class VideoVinkki(base):
@@ -96,7 +96,7 @@ class VideoVinkki(base):
             kurssit_listana.append(kurssi.nimi)
         kurssit_str = ' ,'.join(kurssit_listana)
 
-        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi} \nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
+        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
 
 
