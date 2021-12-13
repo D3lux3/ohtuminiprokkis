@@ -27,13 +27,14 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                tyyppi = self.ask_for_tyyppi()
+                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
 
-                if tyyppi == VinkkiTyyppi.KIRJA:
+                if tyyppi == 1:
                     self.add_new_kirjavinkki()
-                elif tyyppi == VinkkiTyyppi.VIDEO:
+                elif tyyppi == 2:
                     self.add_new_videovinkki()
-                elif tyyppi == VinkkiTyyppi.PODCAST:
+                elif tyyppi == 3:
                     self.add_new_podcastvinkki()
             elif user_input == 3:
                 self.delete_vinkki()
