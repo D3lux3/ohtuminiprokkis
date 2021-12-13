@@ -27,8 +27,6 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                #self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
-                #tyyppi = self.process_command(self.io.read_input('Anna komento: '))
                 tyyppi = self.ask_for_tyyppi()
 
                 if tyyppi == VinkkiTyyppi.KIRJA:
