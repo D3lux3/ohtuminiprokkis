@@ -1,4 +1,4 @@
-from models import KirjaVinkki, VideoVinkki, Kurssi, Tagi
+from models import KirjaVinkki, PodcastVinkki, VideoVinkki, Kurssi, Tagi
 from vinkkityyppi import VinkkiTyyppi
 
 
@@ -27,7 +27,7 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n')
+                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki')
                 tyyppi = self.process_command(self.io.read_input('Anna komento: '))
 
                 if tyyppi == 1:
@@ -52,9 +52,6 @@ class Ui:
         except ValueError:
             return self.io.write('Anna kelvollinen komento')
 
-    def add_new_podcastvinkki(self):
-        self.io.write('ei tehä vielä mitään')
-
     def add_new_kirjavinkki(self):
         kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
         otsikko = self.io.read_input('Vinkin otsikko: ')
@@ -73,6 +70,14 @@ class Ui:
         self.db.add_video_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
         self.add_courses_video(vinkki_id)
+
+    def add_new_podcastvinkki(self):
+        author = self.io.read_input('Author: ')
+        nimi = self.io.read_input('Podcastin nimi: ')
+        otsikko = self.io.read_input('Otsikko: ')
+        kuvaus = self.io.read_input('Kuvaus: ')
+        vinkki = PodcastVinkki(author = author, nimi = nimi, otsikko = otsikko, kuvaus = kuvaus)
+        self.db.add_podcast_vinkki_to_db(podcast = vinkki)
                 
     def add_tags(self, vinkki_id):
         while True:
