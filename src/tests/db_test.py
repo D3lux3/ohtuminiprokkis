@@ -1,7 +1,7 @@
 import os
 import unittest
 from db import DataBase
-from models import KirjaVinkki, Kurssi, VideoVinkki, Tagi, base
+from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, Tagi, base
 from vinkkityyppi import VinkkiTyyppi
 
 class Testdb(unittest.TestCase):
@@ -10,6 +10,7 @@ class Testdb(unittest.TestCase):
         self.tmp_db = DataBase("tmp123db", base)
         self.kirjavinkki = KirjaVinkki(otsikko = "Pro Git Book", kommentti = "Very cool")
         self.videovinkki = VideoVinkki(otsikko = "New video vinkki", url = "www.newvinkki.com", kommentti = "Very good kommentti")
+        self.podcastvinkki = PodcastVinkki(author = "yle", nimi = "joku podcast", otsikko = "it ja tulevaisuus", kuvaus = "ok")
         self.kurssi = Kurssi(nimi = "TKT20006 Ohjelmistotuotanto")
         self.tagi = Tagi(nimi = "tag1")
 
@@ -49,6 +50,20 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(query_result[0].related_courses), 0)
         self.assertEqual(query_result[0].luettu, self.videovinkki.luettu)
         self.assertFalse(query_result[0].luettu, self.videovinkki.luettu)
+
+    def test_add_new_podcastvinkkit_adds_correct_podcastvinkki_to_db(self):
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
+        query_result = self.tmp_db.session.query(PodcastVinkki).all()[0]
+        result = self.tmp_db.find_all_vinkit()
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(query_result.author, self.podcastvinkki.author)
+        self.assertEqual(query_result.tyyppi , "Podcast")
+        self.assertEqual(query_result.nimi , self.podcastvinkki.nimi)
+        self.assertEqual(query_result.otsikko , self.podcastvinkki.otsikko)
+        self.assertEqual(query_result.kuvaus , self.podcastvinkki.kuvaus)
+        self.assertFalse(query_result.luettu)
+
 
     # viitteen lisäys vinkille
     def test_course_can_be_added_to_kirjavinkki(self):
