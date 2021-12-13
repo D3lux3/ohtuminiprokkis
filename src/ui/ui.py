@@ -79,14 +79,24 @@ class Ui:
         vinkki = PodcastVinkki(author = author, nimi = nimi, otsikko = otsikko, kuvaus = kuvaus)
         self.db.add_podcast_vinkki_to_db(podcast = vinkki)
         vinkki_id = vinkki.id
+        self.add_tags_podcastvinkki(vinkki_id)
         self.add_courses_podcast(vinkki_id)
-                
+
     def add_tags(self, vinkki_id):
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
                 teksti = self.io.read_input("Tagi: ")
                 self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
+            elif valinta == 2:
+                break
+
+    def add_tags_podcastvinkki(self, vinkki_id: int):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = self.io.read_input("Tagi: ")
+                self.db.add_tag_to_podcastvinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
 

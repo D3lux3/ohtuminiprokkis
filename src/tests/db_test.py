@@ -2,7 +2,7 @@ import os
 import unittest
 from db import DataBase
 from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, Tagi, base
-from models import kirjavinkki_courses, podcastvinkki_courses
+from models import kirjavinkki_courses, podcastvinkki_courses, podcastvinkki_tagit
 from vinkkityyppi import VinkkiTyyppi
 
 class Testdb(unittest.TestCase):
@@ -103,6 +103,18 @@ class Testdb(unittest.TestCase):
         self.assertEqual(tagi[0].nimi, self.tagi.nimi)
         self.assertEqual(len(tagi), 1)
 
+    def test_tag_can_be_added_to_podcastvinkki(self):
+        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        tagi2 = Tagi(nimi = "tag2")
+        self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, self.tagi)
+        self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, tagi2)
+        query_result = self.tmp_db.session.query(PodcastVinkki).all()
+        tagi = query_result[0].related_tags
+
+        self.assertEqual(tagi[0].nimi, self.tagi.nimi)
+        self.assertEqual(tagi[1].nimi, tagi2.nimi)
+        self.assertEqual(len(tagi), 2)
+
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
@@ -125,7 +137,16 @@ class Testdb(unittest.TestCase):
     def test_course_added_to_podcastvinkki_is_added_to_podcastvinkki_courses(self):
         self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
         self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
-        query_result = self.tmp_db.session.query(podcastvinkki_courses)
+        query_result = self.tmp_db.session.query(podcastvinkki_courses).all()
+        filtered_result = self.tmp_db.session.query(podcastvinkki_courses).filter(podcastvinkki_courses.c.podcastvinkki_id == 1).all()
+
+        self.assertEqual(len(filtered_result), 1)
+        self.assertEqual(len(query_result), 1)
+
+    def test_tag_added_to_podcastvinkki_is_added_to_podcastvinkki_tagit(self):
+        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
+        query_result = self.tmp_db.session.query(podcastvinkki_courses).all()
 
         self.assertEqual(len(query_result), 1)
 
@@ -146,6 +167,11 @@ class Testdb(unittest.TestCase):
         self.assertFalse(removed)
         self.assertEqual(len(query_result), 1)
 
+    def test_delete_vinkki_returns_false_when_given_incorrect_tyyppi(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        removed = self.tmp_db.delete_vinkki_with_id(1, None)
+        self.assertFalse(removed)
+
     def test_deleting_kirjavinkki_deletes_its_related_courses_from_kirjavinkki_courses(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
         self.tmp_db.add_course_to_kirjavinkki(self.kirjavinkki.id, self.kurssi)
@@ -154,11 +180,22 @@ class Testdb(unittest.TestCase):
 
         self.assertEqual(len(query_result), 0)
 
+    def test_deleting_podcastvinkki_deletes_its_related_courses_from_podcastvinkki_courses(self):
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
+        self.tmp_db.delete_vinkki_with_id(self.podcastvinkki.id, VinkkiTyyppi.PODCAST)
+        query_result = self.tmp_db.session.query(podcastvinkki_courses).all()
 
-    def test_delete_vinkki_returns_false_when_given_incorrect_tyyppi(self):
-        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
-        removed = self.tmp_db.delete_vinkki_with_id(1, None)
-        self.assertFalse(removed)
+        self.assertEqual(len(query_result), 0)
+
+    def test_deleting_podcastvinkki_deletes_its_tags_from_podcastvinkki_tagit(self):
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, self.tagi)
+        self.tmp_db.delete_vinkki_with_id(self.podcastvinkki.id, VinkkiTyyppi.PODCAST)
+
+        query_result = self.tmp_db.session.query(podcastvinkki_tagit).all()
+
+        self.assertEqual(len(query_result), 0)
 
     # queryt
     def test_query_with_id_returns_correct_kirja_obect(self):

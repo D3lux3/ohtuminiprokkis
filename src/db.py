@@ -46,6 +46,11 @@ class DataBase:
         vinkki.related_tags.append(tagi)
         self.session.commit()
 
+    def add_tag_to_podcastvinkki(self, vinkin_id: int, tagi: Tagi):
+        vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
+        vinkki.related_tags.append(tagi)
+        self.session.commit()
+
     def find_all_vinkit(self) -> List:
         """Hakee kaikki kirjavinkit tietokannasta, ja palauttaa ne listana."""
         kaikki_vinkit = []
