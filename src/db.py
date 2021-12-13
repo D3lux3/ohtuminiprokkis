@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import KirjaVinkki, Kurssi, VideoVinkki, Tagi
+from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, Tagi
 from vinkkityyppi import VinkkiTyyppi
 
 class DataBase:
@@ -19,6 +19,11 @@ class DataBase:
     def add_video_vinkki_to_db(self, kirja: VideoVinkki):
         """Lisää videovinkki tietokantaan."""
         self.session.add(kirja)
+        self.session.commit()
+
+    def add_podcast_vinkki_to_db(self, podcast: PodcastVinkki):
+        """Lisää podcastvinkki tietokantaan."""
+        self.session.add(podcast)
         self.session.commit()
 
     def add_course_to_kirjavinkki(self, vinkin_id: int, kurssi: Kurssi):
@@ -41,6 +46,7 @@ class DataBase:
         kaikki_vinkit = []
         kaikki_vinkit.extend(self.session.query(KirjaVinkki).all())
         kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
+        kaikki_vinkit.extend(self.session.query(PodcastVinkki).all())
         return kaikki_vinkit
 
     def delete_vinkki_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
