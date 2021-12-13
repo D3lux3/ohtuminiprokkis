@@ -78,6 +78,8 @@ class Ui:
         kuvaus = self.io.read_input('Kuvaus: ')
         vinkki = PodcastVinkki(author = author, nimi = nimi, otsikko = otsikko, kuvaus = kuvaus)
         self.db.add_podcast_vinkki_to_db(podcast = vinkki)
+        vinkki_id = vinkki.id
+        self.add_courses_podcast(vinkki_id)
                 
     def add_tags(self, vinkki_id):
         while True:
@@ -103,6 +105,15 @@ class Ui:
             if valinta == 1:
                 teksti = self.io.read_input("Kurssin nimi: ")
                 self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
+            elif valinta == 2:
+                break
+
+    def add_courses_podcast(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = self.io.read_input("Kurssin nimi: ")
+                self.db.add_course_to_podcastvinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
 

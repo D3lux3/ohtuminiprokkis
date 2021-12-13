@@ -30,9 +30,14 @@ class DataBase:
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
-        
+
     def add_course_to_videovinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(VideoVinkki).get(vinkin_id)
+        vinkki.related_courses.append(kurssi)
+        self.session.commit()
+
+    def add_course_to_podcastvinkki(self, vinkin_id: int, kurssi: Kurssi):
+        vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
 
