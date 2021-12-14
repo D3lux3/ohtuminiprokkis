@@ -1,4 +1,4 @@
-from models import KirjaVinkki, PodcastVinkki, VideoVinkki, Kurssi, Tagi
+from models import KirjaVinkki, PodcastVinkki, VideoVinkki, BlogpostVinkki, Kurssi, Tagi
 from vinkkityyppi import VinkkiTyyppi
 
 
@@ -48,7 +48,7 @@ class Ui:
 
     def choose_type(self):
         while True:
-            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n\n0: Palaa päävalikkoon')
+            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n4: Blogpostvinkki\n0: Palaa päävalikkoon')
             tyyppi = self.process_command(self.io.read_input('Anna komento: '))
 
             if tyyppi == 1:
@@ -57,6 +57,8 @@ class Ui:
                 self.add_new_videovinkki()
             elif tyyppi == 3:
                 self.add_new_podcastvinkki()
+            elif tyyppi == 4:
+                self.add_new_blogpostvinkki()
             elif tyyppi == 0:
                 pass
             else:
@@ -96,6 +98,17 @@ class Ui:
         self.add_tags_podcastvinkki(vinkki_id)
         self.add_courses_podcast(vinkki_id)
 
+    def add_new_blogpostvinkki(self):
+        author = self.io.read_input('Author: ')
+        nimi = self.io.read_input('Blogpostin nimi: ')
+        otsikko = self.io.read_input('Otsikko: ')
+        kommentti = self.io.read_input('Kommentti: ')
+        vinkki = BlogpostVinkki(author = author, nimi = nimi, otsikko = otsikko, kommentti = kommentti)
+        self.db.add_blogpost_vinkki_to_db(blogpost = vinkki)
+        vinkki_id = vinkki.id
+        self.add_tags_blogpostvinkki(vinkki_id)
+        self.add_courses_blogpost(vinkki_id)
+
     def add_tags_kirjavinkki(self, vinkki_id):
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
@@ -113,6 +126,17 @@ class Ui:
             if valinta == 1:
                 teksti = self.io.read_input("Tagi: ")
                 self.db.add_tag_to_podcastvinkki(vinkki_id, Tagi(nimi = teksti))
+            elif valinta == 2:
+                break
+            else:
+                self.io.write('Virheellinen syöte')
+
+    def add_tags_blogpostvinkki(self, vinkki_id: int):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = self.io.read_input("Tagi: ")
+                self.db.add_tag_to_blogpostvinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
             else:
@@ -151,6 +175,17 @@ class Ui:
             else:
                 self.io.write('Virheellinen syöte')
 
+    def add_courses_blogpost(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkkiin liittyvän kurssin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = self.io.read_input("Kurssin nimi: ")
+                self.db.add_course_to_blogpostvinkki(vinkki_id, Kurssi(nimi = teksti))
+            elif valinta == 2:
+                break
+            else:
+                self.io.write('Virheellinen syöte')
+
     def print_vinkit(self):
         vinkit = self.db.find_all_vinkit()
         self.io.write('Tallennetut lukuvinkit:\n')
@@ -178,6 +213,7 @@ class Ui:
         self.io.write('1: Kirja')
         self.io.write('2: Video')
         self.io.write('3: Podcast')
+        self.io.write('4: Blogpost')
 
         tyyppi = None
         user_input = self.process_command(self.io.read_input('Anna komento: '))
@@ -187,6 +223,8 @@ class Ui:
             tyyppi = VinkkiTyyppi.VIDEO
         elif user_input == 3:
             tyyppi = VinkkiTyyppi.PODCAST
+        elif user_input == 4:
+            tyyppi = VinkkiTyyppi.BLOG
         return tyyppi
 
     def print_vinkit_with_id(self):

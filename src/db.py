@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, Tagi
+from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, BlogpostVinkki, Tagi
 from vinkkityyppi import VinkkiTyyppi
 
 class DataBase:
@@ -26,6 +26,11 @@ class DataBase:
         self.session.add(podcast)
         self.session.commit()
 
+    def add_blogpost_vinkki_to_db(self, blogpost: BlogpostVinkki):
+        """Lisää blogpostvinkki tietokantaan."""
+        self.session.add(blogpost)
+        self.session.commit()
+
     def add_course_to_kirjavinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
@@ -40,6 +45,11 @@ class DataBase:
         vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
+    
+    def add_course_to_blogpostvinkki(self, vinkin_id: int, kurssi: Kurssi):
+        vinkki = self.session.query(BlogpostVinkki).get(vinkin_id)
+        vinkki.related_courses.append(kurssi)
+        self.session.commit()
 
     def add_tag_to_vinkki(self, vinkin_id: int, tagi: Tagi):
         vinkki = self.session.query(KirjaVinkki).get(vinkin_id)
@@ -50,6 +60,11 @@ class DataBase:
         vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
         vinkki.related_tags.append(tagi)
         self.session.commit()
+    
+    def add_tag_to_blogpostvinkki(self, vinkin_id: int, tagi: Tagi):
+        vinkki = self.session.query(BlogpostVinkki).get(vinkin_id)
+        vinkki.related_tags.append(tagi)
+        self.session.commit()
 
     def find_all_vinkit(self) -> List:
         """Hakee kaikki kirjavinkit tietokannasta, ja palauttaa ne listana."""
@@ -57,6 +72,7 @@ class DataBase:
         kaikki_vinkit.extend(self.session.query(KirjaVinkki).all())
         kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
         kaikki_vinkit.extend(self.session.query(PodcastVinkki).all())
+        kaikki_vinkit.extend(self.session.query(BlogpostVinkki).all())
         return kaikki_vinkit
 
     def delete_vinkki_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
@@ -78,4 +94,6 @@ class DataBase:
             query_result = self.session.query(VideoVinkki).get(vinkin_id)
         elif vinkin_tyyppi == VinkkiTyyppi.PODCAST:
             query_result = self.session.query(PodcastVinkki).get(vinkin_id)
+        elif vinkin_tyyppi == VinkkiTyyppi.BLOG:
+            query_result = self.session.query(BlogpostVinkki).get(vinkin_id)
         return query_result
