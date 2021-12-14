@@ -26,7 +26,7 @@ class TestUi(unittest.TestCase):
     def test_legal_input_command(self):
         self.stub_ui.process_command(1)
         self.assertEqual(len(self.io.outputs), 0)
-    
+
     def test_illegal_input_command(self):
         self.stub_ui.process_command("illegal command")
         self.assertEqual(self.io.outputs[0], "Anna kelvollinen komento")
@@ -71,3 +71,17 @@ class TestUi(unittest.TestCase):
         self.stub_ui.start()
 
         self.db_mock.add_podcast_vinkki_to_db.assert_called()
+
+    def test_delete_vinkki_called_when_selected(self):
+        self.io = Stub_io(["3", "1", "1", "5"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.delete_vinkki_with_id.assert_called()
+
+    def test_add_videovinkki_calls_add_video_vinkki_to_db(self):
+        self.io = Stub_io(["2", "2", "Never gonna give you up", "youtube.com/abcd", "Ihan ok video", "2", "5"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.add_video_vinkki_to_db.assert_called()
