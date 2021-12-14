@@ -24,6 +24,12 @@ podcastvinkki_courses = Table('podcastvinkki_courses', base.metadata,
      Column('kurssi_id', ForeignKey('kurssit.id'))
 )
 
+blogpostvinkki_courses = Table('blogpostvinkki_courses', base.metadata,
+     Column('id', Integer, primary_key=True),
+     Column('blogpostvinkki_id', ForeignKey('blogpostvinkit.id')),
+     Column('kurssi_id', ForeignKey('kurssit.id'))
+)
+
 kirjavinkki_tagit = Table('kirjavinkki_tagit', base.metadata, 
         Column('id', Integer, primary_key=True),
         Column('kirjavinkki2_id',ForeignKey('kirjavinkit.id')),
@@ -39,6 +45,12 @@ videovinkki_tagit = Table('videovinkki_tagit', base.metadata,
 podcastvinkki_tagit = Table('podcastvinkki_tagit', base.metadata,
         Column('id', Integer, primary_key=True),
         Column('podcastvinkki_id',ForeignKey('podcastvinkit.id')),
+        Column('tagi_id', ForeignKey('tagit.id'))
+)
+
+blogpostvinkki_tagit = Table('blogpostvinkki_tagit', base.metadata,
+        Column('id', Integer, primary_key=True),
+        Column('blogpostvinkki_id',ForeignKey('blogpostvinkit.id')),
         Column('tagi_id', ForeignKey('tagit.id'))
 )
 
@@ -144,4 +156,36 @@ class PodcastVinkki(base):
 
         return f'\nAuthor: {self.author}\nPodcastin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKuvaus: {self.kuvaus}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 
+
+class BlogpostVinkki(base):
+    __tablename__ = 'blogpostvinkit'
+    id = Column(Integer, primary_key=True)
+    author = Column(String, nullable=False)
+    nimi = Column(String, nullable=False)
+    otsikko = Column(String, nullable=False)
+    kommentti = Column(String, nullable=False)
+    tyyppi = Column(String, nullable=False, default="Blogpost")
+    related_tags = relationship(
+        'Tagi', secondary=blogpostvinkki_tagit, backref='blogpostvinkit')
+    related_courses = relationship(
+        'Kurssi', secondary=blogpostvinkki_courses, backref='blogpostvinkit')
+    luettu = Column(Boolean, nullable=False, default=False)
+
+
+    def add_related_course(self, kurssi: Kurssi):
+        self.related_courses.append(kurssi)
+
+    def __str__(self) -> str:
+        kurssit = self.related_courses
+        kurssit_listana = []
+        for kurssi in kurssit:
+            kurssit_listana.append(kurssi.nimi)
+        kurssit_str = ' ,'.join(kurssit_listana)
+        tagit = self.related_tags
+        tagit_listana = []
+        for tagi in tagit:
+            tagit_listana.append(tagi.nimi)
+        tagit_str = ','.join(tagit_listana)
+
+        return f'\nAuthor: {self.author}\nBlogpostin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKommentti: {self.kommentti}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
 

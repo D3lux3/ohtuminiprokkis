@@ -4,3 +4,4 @@ class VinkkiTyyppi(Enum):
     KIRJA = "Kirjavinkki"
     VIDEO = "Videovinkki"
     PODCAST = "Podcastvinkki"
+    BLOG = "Blogpostvinkki"
