@@ -27,15 +27,7 @@ class Ui:
             if user_input == 1:
                 self.print_vinkit()
             elif user_input == 2:
-                self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki')
-                tyyppi = self.process_command(self.io.read_input('Anna komento: '))
-
-                if tyyppi == 1:
-                    self.add_new_kirjavinkki()
-                elif tyyppi == 2:
-                    self.add_new_videovinkki()
-                elif tyyppi == 3:
-                    self.add_new_podcastvinkki()
+                self.choose_type()
             elif user_input == 3:
                 self.delete_vinkki()
             elif user_input == 4:
@@ -43,6 +35,8 @@ class Ui:
             elif user_input == 5:
                 self.io.write('Kiitos ja näkemiin!')
                 break
+            else:
+                self.io.write('Virheellinen syöte')
             print()
 
     def process_command(self, command):
@@ -52,14 +46,34 @@ class Ui:
         except ValueError:
             return self.io.write('Anna kelvollinen komento')
 
+    def choose_type(self):
+        while True:
+            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n\n0: Palaa päävalikkoon')
+            tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+
+            if tyyppi == 1:
+                self.add_new_kirjavinkki()
+            elif tyyppi == 2:
+                self.add_new_videovinkki()
+            elif tyyppi == 3:
+                self.add_new_podcastvinkki()
+            elif tyyppi == 0:
+                pass
+            else:
+                self.io.write('Virheellinen syöte')
+                print()
+                continue
+            break
+
     def add_new_kirjavinkki(self):
         kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
         otsikko = self.io.read_input('Vinkin otsikko: ')
         isbn = self.io.read_input('Kirjan isbn-koodi: ')
-        vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn)
+        kommentti = self.io.read_input('Vinkin kommentti: ')
+        vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn, kommentti = kommentti)
         self.db.add_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
-        self.add_tags(vinkki_id)
+        self.add_tags_kirjavinkki(vinkki_id)
         self.add_courses_kirja(vinkki_id)
 
     def add_new_videovinkki(self):
@@ -82,7 +96,7 @@ class Ui:
         self.add_tags_podcastvinkki(vinkki_id)
         self.add_courses_podcast(vinkki_id)
 
-    def add_tags(self, vinkki_id):
+    def add_tags_kirjavinkki(self, vinkki_id):
         while True:
             valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
             if valinta == 1:
@@ -90,6 +104,8 @@ class Ui:
                 self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_tags_podcastvinkki(self, vinkki_id: int):
         while True:
@@ -99,6 +115,8 @@ class Ui:
                 self.db.add_tag_to_podcastvinkki(vinkki_id, Tagi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_kirja(self, vinkki_id):
         while True:
@@ -108,6 +126,8 @@ class Ui:
                 self.db.add_course_to_kirjavinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_video(self, vinkki_id):
         while True:
@@ -117,6 +137,8 @@ class Ui:
                 self.db.add_course_to_videovinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def add_courses_podcast(self, vinkki_id):
         while True:
@@ -126,6 +148,8 @@ class Ui:
                 self.db.add_course_to_podcastvinkki(vinkki_id, Kurssi(nimi = teksti))
             elif valinta == 2:
                 break
+            else:
+                self.io.write('Virheellinen syöte')
 
     def print_vinkit(self):
         vinkit = self.db.find_all_vinkit()

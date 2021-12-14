@@ -32,7 +32,7 @@ class TestUi(unittest.TestCase):
         self.assertEqual(self.io.outputs[0], "Anna kelvollinen komento")
 
     def test_add_new_kirjavinkki_calls_db_add_vinkki_to_db(self):
-        self.io = Stub_io(["2", "1", "Unknown", "Pro Git Book", "0123456789", "2", "2", "5"])
+        self.io = Stub_io(["2", "1", "Unknown", "Pro Git Book", "0123456789", "Very nice book", "2", "2", "5"])
         self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
         self.stub_ui.start()
 
