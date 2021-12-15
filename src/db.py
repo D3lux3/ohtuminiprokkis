@@ -97,3 +97,20 @@ class DataBase:
         elif vinkin_tyyppi == VinkkiTyyppi.BLOG:
             query_result = self.session.query(BlogpostVinkki).get(vinkin_id)
         return query_result
+
+    def search_vinkki_by_tag(self, tagin_id):
+        """Hakee vinkit tagin id:n perusteella"""
+        tagi  = self.session.query(Tagi).get(tagin_id)
+        vinkit = []
+        vinkit.extend(tagi.kirjavinkit)
+        vinkit.extend(tagi.videovinkit)
+        return vinkit
+
+    def find_all_tagit(self):
+        """Hakee tagit
+
+        Returns:
+            List
+        """
+        return self.session.query(Tagi).all()
+
