@@ -20,7 +20,8 @@ class Ui:
             self.io.write('2: Lisää lukuvinkki')
             self.io.write('3: Poista lukuvinkki')
             self.io.write('4: Valitse satunnainen lukuvinkki')
-            self.io.write('5: Lopeta')
+            self.io.write('5: Hae tagin perusteella')
+            self.io.write('0: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
             self.io.write('')
 
@@ -33,6 +34,8 @@ class Ui:
             elif user_input == 4:
                 self.random_vinkki()
             elif user_input == 5:
+                self.search_by_tag()
+            elif user_input == 0:
                 self.io.write('Kiitos ja näkemiin!')
                 break
             else:
@@ -85,6 +88,7 @@ class Ui:
         vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
         self.db.add_video_vinkki_to_db(kirja = vinkki)
         vinkki_id = vinkki.id
+        self.add_tags_videovinkki(vinkki_id)
         self.add_courses_video(vinkki_id)
 
     def add_new_podcastvinkki(self):
@@ -115,6 +119,17 @@ class Ui:
             if valinta == 1:
                 teksti = self.io.read_input("Tagi: ")
                 self.db.add_tag_to_vinkki(vinkki_id, Tagi(nimi = teksti))
+            elif valinta == 2:
+                break
+            else:
+                self.io.write('Virheellinen syöte')
+
+    def add_tags_videovinkki(self, vinkki_id):
+        while True:
+            valinta = self.process_command(self.io.read_input(f"Haluatko lisätä vinkille uuden tagin?\n1: Kyllä\n2: Ei\n"))
+            if valinta == 1:
+                teksti = self.io.read_input("Tagi: ")
+                self.db.add_tag_to_videovinkki(vinkki_id, Tagi(nimi=teksti))
             elif valinta == 2:
                 break
             else:
@@ -239,3 +254,17 @@ class Ui:
         random_number = self.number_generator(len(vinkit)-1)
         vinkki = vinkit[random_number]
         self.io.write(vinkki)
+
+    def search_by_tag(self):
+        self.io.write('Anna tagin id:')
+        self.print_tagit_with_id()
+        haettava_tagi = self.process_command(self.io.read_input('haettavan tagin id: '))
+        vinkit = self.db.search_vinkki_by_tag(haettava_tagi)
+        for vinkki in vinkit:
+            self.io.write(vinkki)
+        
+    def print_tagit_with_id(self):
+        tagit = self.db.find_all_tagit()
+        for tagi in tagit:
+            self.io.write(f'id: {tagi.id} {tagi.nimi}')
+
