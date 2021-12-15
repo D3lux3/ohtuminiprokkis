@@ -21,7 +21,7 @@ class Ui:
             self.io.write('3: Poista lukuvinkki')
             self.io.write('4: Valitse satunnainen lukuvinkki')
             self.io.write('5: Hae tagin perusteella')
-            self.io.write('6: Lopeta')
+            self.io.write('0: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
             print()
 
@@ -35,7 +35,7 @@ class Ui:
                 self.random_vinkki()
             elif user_input == 5:
                 self.search_by_tag()
-            elif user_input == 6:
+            elif user_input == 0:
                 self.io.write('Kiitos ja näkemiin!')
                 break
             else:
