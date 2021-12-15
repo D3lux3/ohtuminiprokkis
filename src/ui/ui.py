@@ -21,7 +21,8 @@ class Ui:
             self.io.write('2: Lisää lukuvinkki')
             self.io.write('3: Poista lukuvinkki')
             self.io.write('4: Valitse satunnainen lukuvinkki')
-            self.io.write('5: Lopeta')
+            self.io.write('5: Hae tagin perusteella')
+            self.io.write('6: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
             print()
 
@@ -36,6 +37,8 @@ class Ui:
             elif user_input == 4:
                 self.random_vinkki()
             elif user_input == 5:
+                self.search_by_tag()
+            elif user_input == 6:
                 self.io.write('Kiitos ja näkemiin!')
                 break
             print()
@@ -78,3 +81,17 @@ class Ui:
         random_number = self.number_generator(len(vinkit)-1)
         vinkki = vinkit[random_number]
         self.io.write(vinkki)
+
+    def search_by_tag(self):
+        self.io.write('Anna tagin id:')
+        self.print_tagit_with_id()
+        haettava_tagi = self.process_command(self.io.read_input('haettavan tagin id: '))
+        vinkit = self.db.search_vinkki_by_tag(haettava_tagi)
+        for vinkki in vinkit:
+            self.io.write(vinkki)
+        
+    def print_tagit_with_id(self):
+        tagit = self.db.find_all_tagit()
+        for tagi in tagit:
+            self.io.write(f'id: {tagi.id} {tagi.nimi}')
+
