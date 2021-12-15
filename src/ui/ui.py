@@ -8,7 +8,6 @@ class Ui:
         self.db = db
         self.number_generator = random_int
 
-
     def start(self):
         self.io.write('Tervetuloa käyttämään Lukuvinkki-sovellusta \n')
         self.print_options()
@@ -21,7 +20,8 @@ class Ui:
             self.io.write('3: Poista lukuvinkki')
             self.io.write('4: Valitse satunnainen lukuvinkki')
             self.io.write('5: Lopeta')
-            user_input = self.process_command(self.io.read_input('Anna komento: '))
+            user_input = self.process_command(
+                self.io.read_input('Anna komento: '))
             self.io.write('')
 
             if user_input == 1:
@@ -48,7 +48,8 @@ class Ui:
 
     def choose_type(self):
         while True:
-            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n4: Blogpostvinkki\n5: Palaa päävalikkoon')
+            self.io.write(
+                'Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n4: Blogpostvinkki\n5: Palaa päävalikkoon')
             tyyppi = self.process_command(self.io.read_input('Anna komento: '))
 
             if tyyppi == 1:
@@ -72,11 +73,59 @@ class Ui:
         otsikko = self.io.read_input('Vinkin otsikko: ')
         isbn = self.io.read_input('Kirjan isbn-koodi: ')
         kommentti = self.io.read_input('Vinkin kommentti: ')
-        vinkki = KirjaVinkki(kirjoittaja = kirjoittaja, otsikko = otsikko, isbn = isbn, kommentti = kommentti)
-        self.db.add_vinkki_to_db(kirja = vinkki)
+        vinkki = KirjaVinkki(kirjoittaja=kirjoittaja,
+                             otsikko=otsikko, isbn=isbn, kommentti=kommentti)
+        self.db.add_vinkki_to_db(kirja=vinkki)
         vinkki_id = vinkki.id
         self.add_tags_kirjavinkki(vinkki_id)
         self.add_courses_kirja(vinkki_id)
+
+    def print_all_vinkit(self):
+        vinkit = self.db.find_all_vinkit()
+        self.io.write('Tallennetut lukuvinkit:\n')
+        for vinkki in vinkit:
+            self.io.write(f'{str(vinkki)}\n')
+
+
+    def print_vinkit(self):
+        self.ask_for_type()
+
+    def ask_for_type(self) -> VinkkiTyyppi:
+        while True:
+            self.io.write('Valitse tyyppi: ')
+            self.io.write('1: Listaa Kirjavinkit')
+            self.io.write('2: Listaa Videovinkit')
+            self.io.write('3: Listaa Podcastvinkit')
+            self.io.write('4: Listaa Blogivinkit')
+            self.io.write('5: Listaa kaikki vinkit')
+            self.io.write('6: Palaa päävalikkoon')
+            tyyppi = self.process_command(self.io.read_input('Anna komento: '))
+
+            if tyyppi == 1:
+                self.print_vinkit_with_type(VinkkiTyyppi.KIRJA)
+            elif tyyppi == 2:
+                self.print_vinkit_with_type(VinkkiTyyppi.VIDEO)
+            elif tyyppi == 3:
+                self.print_vinkit_with_type(VinkkiTyyppi.PODCAST)
+            elif tyyppi == 4:
+                self.print_vinkit_with_type(VinkkiTyyppi.BLOG)
+            elif tyyppi == 5:
+                self.print_all_vinkit()
+            elif tyyppi == 6:
+                pass
+            else:
+                self.io.write('Virheellinen syöte')
+                print()
+                continue
+            break
+        
+
+    def print_vinkit_with_type(self, vinkkityyppi):
+        vinkit = self.db.find_all_vinkit_with_type(vinkkityyppi)
+        self.io.write('Vinkit:\n')
+    
+        for vinkki in vinkit:
+            self.io.write(f'{str(vinkki)}\n')
 
     def add_new_videovinkki(self):
         otsikko = self.io.read_input('Vinkin otsikko: ')
@@ -185,12 +234,6 @@ class Ui:
                 break
             else:
                 self.io.write('Virheellinen syöte')
-
-    def print_vinkit(self):
-        vinkit = self.db.find_all_vinkit()
-        self.io.write('Tallennetut lukuvinkit:\n')
-        for vinkki in vinkit:
-            self.io.write(f'{str(vinkki)}\n')
 
     def delete_vinkki(self):
         tyyppi = self.ask_for_tyyppi()
