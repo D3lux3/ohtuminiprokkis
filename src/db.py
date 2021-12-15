@@ -16,9 +16,9 @@ class DataBase:
         self.session.add(kirja)
         self.session.commit()
 
-    def add_video_vinkki_to_db(self, kirja: VideoVinkki):
+    def add_video_vinkki_to_db(self, video: VideoVinkki):
         """Lisää videovinkki tietokantaan."""
-        self.session.add(kirja)
+        self.session.add(video)
         self.session.commit()
 
     def add_podcast_vinkki_to_db(self, podcast: PodcastVinkki):
@@ -66,6 +66,11 @@ class DataBase:
         vinkki.related_tags.append(tagi)
         self.session.commit()
 
+    def add_tag_to_videovinkki(self, vinkin_id: int, tagi: Tagi):
+        vinkki = self.session.query(VideoVinkki).get(vinkin_id)
+        vinkki.related_tags.append(tagi)
+        self.session.commit()
+
     def find_all_vinkit(self) -> List:
         """Hakee kaikki kirjavinkit tietokannasta, ja palauttaa ne listana."""
         kaikki_vinkit = []
@@ -104,6 +109,8 @@ class DataBase:
         vinkit = []
         vinkit.extend(tagi.kirjavinkit)
         vinkit.extend(tagi.videovinkit)
+        vinkit.extend(tagi.podcastvinkit)
+        vinkit.extend(tagi.blogpostvinkit)
         return vinkit
 
     def find_all_tagit(self):
