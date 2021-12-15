@@ -48,7 +48,7 @@ class Ui:
 
     def choose_type(self):
         while True:
-            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n4: Blogpostvinkki\n0: Palaa päävalikkoon')
+            self.io.write('Valitse vinkin tyyppi:\n1: Kirjalukuvinkki\n2: Videolukuvinkki\n3: Podcastlukuvinkki\n4: Blogpostvinkki\n5: Palaa päävalikkoon')
             tyyppi = self.process_command(self.io.read_input('Anna komento: '))
 
             if tyyppi == 1:
@@ -59,7 +59,7 @@ class Ui:
                 self.add_new_podcastvinkki()
             elif tyyppi == 4:
                 self.add_new_blogpostvinkki()
-            elif tyyppi == 0:
+            elif tyyppi == 5:
                 pass
             else:
                 self.io.write('Virheellinen syöte')
