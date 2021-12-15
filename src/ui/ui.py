@@ -22,7 +22,7 @@ class Ui:
             self.io.write('4: Valitse satunnainen lukuvinkki')
             self.io.write('5: Lopeta')
             user_input = self.process_command(self.io.read_input('Anna komento: '))
-            print()
+            self.io.write('')
 
             if user_input == 1:
                 self.print_vinkit()
@@ -37,7 +37,7 @@ class Ui:
                 break
             else:
                 self.io.write('Virheellinen syöte')
-            print()
+            self.io.write('')
 
     def process_command(self, command):
         try:
