@@ -134,7 +134,7 @@ class Ui:
         url = self.io.read_input('Videon url-osoite: ')
         kommentti = self.io.read_input('Vinkin kommentti: ')
         vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
-        self.db.add_video_vinkki_to_db(kirja = vinkki)
+        self.db.add_video_vinkki_to_db(video = vinkki)
         vinkki_id = vinkki.id
         self.add_tags_videovinkki(vinkki_id)
         self.add_courses_video(vinkki_id)

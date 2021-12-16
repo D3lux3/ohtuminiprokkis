@@ -117,3 +117,35 @@ class TestUi(unittest.TestCase):
         self.stub_ui.start()
         
         self.db_mock.add_tag_to_blogpostvinkki.assert_called()
+
+    def test_adding_courses_to_kirjavinkki_calls_add_course_to_kirjavinkki(self):
+        self.io = Stub_io(["2", "1", "Book writer", "Kurssikirja", "abcdisbn345", "courses are cool", "2", "1", "TiTo", "2", "0"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.add_course_to_kirjavinkki.assert_called()
+
+    def test_adding_courses_to_videovinkki_calls_add_course_to_videovinkki(self):
+        self.io = Stub_io(["2", "2", "Kurssivideo", "videowebsite.org", "i recommend this video", "2", "1", "TiRa", "2", "0"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.add_course_to_videovinkki.assert_called()
+
+    def test_adding_tags_to_podcastvinkki_calls_add_course_to_podcastvinkki(self):
+        self.io = Stub_io([
+            "2", "3", "Podcast maker", "Podcast about courses",
+            "Why courses are nice",
+            "Very useful courses", "2", "1", "OhTu", "2", "0"
+        ])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.add_course_to_podcastvinkki.assert_called()
+
+    def test_adding_tags_to_blogpostvinkki_calls_add_course_to_blogpostvinkki(self):
+        self.io = Stub_io(["2", "4", "Blog creator", "important courses", "best courses", "fun courses to take", "2", "1", "LaMa", "2", "0"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        
+        self.db_mock.add_course_to_blogpostvinkki.assert_called()
