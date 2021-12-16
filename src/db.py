@@ -4,9 +4,11 @@ from sqlalchemy.orm import sessionmaker
 from models import KirjaVinkki, Kurssi, PodcastVinkki, VideoVinkki, BlogpostVinkki, Tagi
 from vinkkityyppi import VinkkiTyyppi
 
+
 class DataBase:
     def __init__(self, db_name: str, base):
-        self.engine = create_engine('sqlite:///' + db_name + ".db")#, echo=True)
+        self.engine = create_engine(
+            'sqlite:///' + db_name + ".db")  # , echo=True)
         session = sessionmaker(bind=self.engine)
         self.session = session()
         base.metadata.create_all(self.engine)
@@ -45,7 +47,7 @@ class DataBase:
         vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
         self.session.commit()
-    
+
     def add_course_to_blogpostvinkki(self, vinkin_id: int, kurssi: Kurssi):
         vinkki = self.session.query(BlogpostVinkki).get(vinkin_id)
         vinkki.related_courses.append(kurssi)
@@ -60,7 +62,7 @@ class DataBase:
         vinkki = self.session.query(PodcastVinkki).get(vinkin_id)
         vinkki.related_tags.append(tagi)
         self.session.commit()
-    
+
     def add_tag_to_blogpostvinkki(self, vinkin_id: int, tagi: Tagi):
         vinkki = self.session.query(BlogpostVinkki).get(vinkin_id)
         vinkki.related_tags.append(tagi)
@@ -89,6 +91,18 @@ class DataBase:
             return True
 
         return False
+
+    def find_all_vinkit_with_type(self, vinkin_tyyppi) -> List:
+        kaikki_vinkit = []
+        if vinkin_tyyppi == VinkkiTyyppi.KIRJA:
+            kaikki_vinkit.extend(self.session.query(KirjaVinkki).all())
+        elif vinkin_tyyppi == VinkkiTyyppi.VIDEO:
+            kaikki_vinkit.extend(self.session.query(VideoVinkki).all())
+        elif vinkin_tyyppi == VinkkiTyyppi.PODCAST:
+            kaikki_vinkit.extend(self.session.query(PodcastVinkki).all())
+        elif vinkin_tyyppi == VinkkiTyyppi.BLOG:
+            kaikki_vinkit.extend(self.session.query(BlogpostVinkki).all())
+        return kaikki_vinkit
 
     def query_with_id(self, vinkin_id: int, vinkin_tyyppi: VinkkiTyyppi):
         """Hakee vinkin id perusteella"""
