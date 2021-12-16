@@ -90,7 +90,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
     
     def test_course_can_be_added_to_videovinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.videovinkki)
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
         self.tmp_db.add_course_to_videovinkki(self.videovinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(VideoVinkki).all()
         kurssit = query_result[0].related_courses
@@ -99,7 +99,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
 
     def test_course_can_be_added_to_podcastvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
         self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(PodcastVinkki).all()
         kurssit = query_result[0].related_courses
@@ -108,7 +108,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
 
     def test_course_can_be_added_to_blogpostvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.blogpostvinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
         self.tmp_db.add_course_to_blogpostvinkki(self.blogpostvinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(BlogpostVinkki).all()
         kurssit = query_result[0].related_courses
@@ -127,7 +127,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(tagi), 1)
 
     def test_tag_can_be_added_to_podcastvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
         tagi2 = Tagi(nimi = "tag2")
         self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, self.tagi)
         self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, tagi2)
@@ -139,7 +139,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(tagi), 2)
 
     def test_tag_can_be_added_to_blogpostvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.blogpostvinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
         tagi2 = Tagi(nimi = "tag2")
         self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, self.tagi)
         self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, tagi2)
