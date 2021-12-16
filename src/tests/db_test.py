@@ -90,7 +90,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
     
     def test_course_can_be_added_to_videovinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.videovinkki)
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
         self.tmp_db.add_course_to_videovinkki(self.videovinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(VideoVinkki).all()
         kurssit = query_result[0].related_courses
@@ -99,7 +99,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
 
     def test_course_can_be_added_to_podcastvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
         self.tmp_db.add_course_to_podcastvinkki(self.podcastvinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(PodcastVinkki).all()
         kurssit = query_result[0].related_courses
@@ -108,7 +108,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(kurssit), 1)
 
     def test_course_can_be_added_to_blogpostvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.blogpostvinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
         self.tmp_db.add_course_to_blogpostvinkki(self.blogpostvinkki.id, self.kurssi)
         query_result = self.tmp_db.session.query(BlogpostVinkki).all()
         kurssit = query_result[0].related_courses
@@ -127,7 +127,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(tagi), 1)
 
     def test_tag_can_be_added_to_podcastvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
         tagi2 = Tagi(nimi = "tag2")
         self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, self.tagi)
         self.tmp_db.add_tag_to_podcastvinkki(self.podcastvinkki.id, tagi2)
@@ -139,7 +139,7 @@ class Testdb(unittest.TestCase):
         self.assertEqual(len(tagi), 2)
 
     def test_tag_can_be_added_to_blogpostvinkki(self):
-        self.tmp_db.add_vinkki_to_db(self.blogpostvinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
         tagi2 = Tagi(nimi = "tag2")
         self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, self.tagi)
         self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, tagi2)
@@ -149,6 +149,19 @@ class Testdb(unittest.TestCase):
         self.assertEqual(tagi[0].nimi, self.tagi.nimi)
         self.assertEqual(tagi[1].nimi, tagi2.nimi)
         self.assertEqual(len(tagi), 2)
+
+    def test_tag_can_be_added_to_videovinkki(self):
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
+        tagi2 = Tagi(nimi = "tag2")
+        self.tmp_db.add_tag_to_videovinkki(self.videovinkki.id, self.tagi)
+        self.tmp_db.add_tag_to_videovinkki(self.videovinkki.id, tagi2)
+        query_result = self.tmp_db.session.query(VideoVinkki).all()
+        tagi = query_result[0].related_tags
+
+        self.assertEqual(tagi[0].nimi, self.tagi.nimi)
+        self.assertEqual(tagi[1].nimi, tagi2.nimi)
+        self.assertEqual(len(tagi), 2)
+
 
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
@@ -265,15 +278,50 @@ class Testdb(unittest.TestCase):
 
         self.assertEqual(len(query_result), 0)
 
-    # queryt
-    def test_query_with_id_returns_correct_kirja_obect(self):
-        pass
+    # muut
+    def test_search_vinkki_by_tag_returns_correct_vinkit(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
 
-    def test_query_with_id_returns_correct_video_obect(self):
-        pass
+        self.tmp_db.add_tag_to_vinkki(self.kirjavinkki.id, self.tagi)
+        self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, self.tagi)
+        tagi2 = Tagi(nimi = "tagi2")
+        self.tmp_db.add_tag_to_blogpostvinkki(self.blogpostvinkki.id, tagi2)
 
-    def test_query_with_nonexisting_id_results_none(self):
-        pass
+        result1 = self.tmp_db.search_vinkki_by_tag(self.tagi.id)
+        result2 = self.tmp_db.search_vinkki_by_tag(tagi2.id)
+
+        self.assertEqual(len(result1), 2)
+        self.assertEqual(len(result2), 1)
+        self.assertEqual(result1[0].otsikko, self.kirjavinkki.otsikko)
+        self.assertEqual(result1[1].otsikko, self.blogpostvinkki.otsikko)
+        self.assertEqual(result2[0].otsikko, self.blogpostvinkki.otsikko)
+
+    def test_find_all_vinkit_with_type_returns_correct_vinkit(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        self.tmp_db.add_blogpost_vinkki_to_db(self.blogpostvinkki)
+        self.tmp_db.add_podcast_vinkki_to_db(self.podcastvinkki)
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
+
+        result_kirja = self.tmp_db.find_all_vinkit_with_type(VinkkiTyyppi.KIRJA)
+        result_blog = self.tmp_db.find_all_vinkit_with_type(VinkkiTyyppi.BLOG)
+        result_podcast = self.tmp_db.find_all_vinkit_with_type(VinkkiTyyppi.PODCAST)
+        result_video = self.tmp_db.find_all_vinkit_with_type(VinkkiTyyppi.VIDEO)
+
+        self.assertEqual(len(result_kirja), 1)
+        self.assertEqual(len(result_blog), 1)
+        self.assertEqual(len(result_podcast), 1)
+        self.assertEqual(len(result_video), 1)
+        self.assertEqual(result_kirja[0].otsikko, self.kirjavinkki.otsikko)
+        self.assertEqual(result_blog[0].otsikko, self.blogpostvinkki.otsikko)
+        self.assertEqual(result_podcast[0].otsikko, self.podcastvinkki.otsikko)
+        self.assertEqual(result_video[0].otsikko, self.videovinkki.otsikko)
+
+    def test_find_all_vinkit_with_type_returns_empty_list_with_wrong_type(self):
+        self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
+        result = self.tmp_db.find_all_vinkit_with_type("asd")
+
+        self.assertEqual(len(result), 0)
 
     def tearDown(self):
         os.remove("tmp123db.db")
