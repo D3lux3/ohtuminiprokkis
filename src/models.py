@@ -98,7 +98,7 @@ class KirjaVinkki(base):
             tagit_listana.append(tagi.nimi)
         tagit_str = ','.join(tagit_listana)
 
-        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu}\nTagit: {tagit_str}'
+        return f'\nKirjan nimi: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nTyyppi: {self.tyyppi}\nLuettu: {self.luettu}\nTagit: {tagit_str}\nKirjoittaja: {self.kirjoittaja}\nIsbn: {self.isbn}'
 
 
 class VideoVinkki(base):
@@ -121,8 +121,13 @@ class VideoVinkki(base):
         for kurssi in kurssit:
             kurssit_listana.append(kurssi.nimi)
         kurssit_str = ' ,'.join(kurssit_listana)
+        tagit = self.related_tags
+        tagit_listana = []
+        for tagi in tagit:
+            tagit_listana.append(tagi.nimi)
+        tagit_str = ','.join(tagit_listana)
 
-        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
+        return f'\nOtsikko: {self.otsikko}\nTyyppi: {self.tyyppi}\nKommentti: {self.kommentti}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}\nUrl: {self.url}\nTagit: {tagit_str}'
 
 class PodcastVinkki(base):
     __tablename__ = 'podcastvinkit'
@@ -164,6 +169,7 @@ class BlogpostVinkki(base):
     nimi = Column(String, nullable=False)
     otsikko = Column(String, nullable=False)
     kommentti = Column(String, nullable=False)
+    url = Column(String, nullable=False)
     tyyppi = Column(String, nullable=False, default="Blogpost")
     related_tags = relationship(
         'Tagi', secondary=blogpostvinkki_tagit, backref='blogpostvinkit')
@@ -187,5 +193,5 @@ class BlogpostVinkki(base):
             tagit_listana.append(tagi.nimi)
         tagit_str = ','.join(tagit_listana)
 
-        return f'\nAuthor: {self.author}\nBlogpostin nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKommentti: {self.kommentti}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}'
+        return f'\nAuthor: {self.author}\nBlogpostauksen nimi: {self.nimi}\nOtsikko: {self.otsikko}\nKommentti: {self.kommentti}\nTyyppi: {self.tyyppi}\nTagit: {tagit_str}\nLiittyvät kurssit: {kurssit_str}\nLuettu: {self.luettu}\nUrl: {self.url}'
 
