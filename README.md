@@ -22,11 +22,11 @@ Ohjelma on analysoitu sekä suunniteltu ryhmässä ennen ensimmäistä sprintti�
 
 - Ohjelmassa on tietokantayhteys.
 - Lukuvinkki tallentuu tietokantaan.
-- Ohjelmassa on tekstipohjainen komentorivikäyttöliittymä lukuvinkin lisäystä varten.
-- Käyttöliittymä lukee käyttäjän syötettä.
-- Lukuvinkki on toteutettu omana luokkanaan.
 - Lukuvinkkit voi tulostaa tietokannasta.
-- Ohjelman testaus on aloitettu.
+- käyttäjä voi tallentaa kirja, video, blogpost, sekä podcast tyyppisiä lukuvinkkejä
+- lukuvinkille voi tallentaa tagin tai liittyvän kurssin, joiden perusteella voi hakea lukuvinkkejä
+- lukuvinkkejä voi poistaa
+- voi hakea satunnaisen lukuvinkin
 
 ## Asennus
 
