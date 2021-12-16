@@ -87,7 +87,7 @@ class TestUi(unittest.TestCase):
         self.db_mock.add_video_vinkki_to_db.assert_called()
     
     def test_add_blogpostvinkki_calls_add_blogpost_vinkki_to_db(self):
-        self.io = Stub_io(["2", "4", "Blogikirjoittaja", "Tietokoneohje", "Miten tietokone sammutetaan", "Ohje ammattilaisille", "2", "2", "0"])
+        self.io = Stub_io(["2", "4", "Blogikirjoittaja", "Tietokoneohje", "Miten tietokone sammutetaan", "Ohje ammattilaisille", "www.url.fi",  "2", "2", "0"])
         self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
         self.stub_ui.start()
         
@@ -112,7 +112,7 @@ class TestUi(unittest.TestCase):
         self.db_mock.add_tag_to_podcastvinkki.assert_called()
 
     def test_adding_tags_to_blogpostvinkki_calls_add_tag_to_blogpostvinkki(self):
-        self.io = Stub_io(["2", "4", "Blog person", "importance of tags", "significance of tags", "best tags to use", "1", "this too is a tag", "2", "2", "0"])
+        self.io = Stub_io(["2", "4", "Blog person", "importance of tags", "significance of tags","www.taglandia.net" ,"best tags to use", "1", "this too is a tag", "2", "2", "0"])
         self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
         self.stub_ui.start()
         
@@ -149,3 +149,10 @@ class TestUi(unittest.TestCase):
         self.stub_ui.start()
         
         self.db_mock.add_course_to_blogpostvinkki.assert_called()
+
+    def test_asks_again_if_important_information_missing(self):
+        self.io = Stub_io(["2", "1", "", "Unknown", "Pro Git Book",
+                          "0123456789", "Very nice book", "2", "2", "0"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.stub_ui.start()
+        self.db_mock.add_vinkki_to_db.assert_called()

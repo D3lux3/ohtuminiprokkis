@@ -12,7 +12,7 @@ class Testdb(unittest.TestCase):
         self.kirjavinkki = KirjaVinkki(otsikko = "Pro Git Book", kommentti = "Very cool")
         self.videovinkki = VideoVinkki(otsikko = "New video vinkki", url = "www.newvinkki.com", kommentti = "Very good kommentti")
         self.podcastvinkki = PodcastVinkki(author = "yle", nimi = "joku podcast", otsikko = "it ja tulevaisuus", kuvaus = "ok")
-        self.blogpostvinkki = BlogpostVinkki(author = "Coco", nimi = "travellaus", otsikko = "kambodza", kommentti = "pilalla")
+        self.blogpostvinkki = BlogpostVinkki(author="Coco", nimi="travellaus", otsikko="kambodza", kommentti="pilalla", url= "www.url.fi")
         self.kurssi = Kurssi(nimi = "TKT20006 Ohjelmistotuotanto")
         self.tagi = Tagi(nimi = "tag1")
 

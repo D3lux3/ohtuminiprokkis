@@ -70,9 +70,17 @@ class Ui:
                 continue
             break
 
+    def min_information(self, message: str):
+        while True:
+            user_input = self.io.read_input(message)
+            if user_input:
+                return user_input
+            else:
+                self.io.write("tämä on pakollinen tieto")
+
     def add_new_kirjavinkki(self):
-        kirjoittaja = self.io.read_input('Vinkin kirjoittaja: ')
-        otsikko = self.io.read_input('Vinkin otsikko: ')
+        kirjoittaja = self.min_information('Vinkin kirjoittaja: ')
+        otsikko = self.min_information('Kirjan nimi: ')
         isbn = self.io.read_input('Kirjan isbn-koodi: ')
         kommentti = self.io.read_input('Vinkin kommentti: ')
         vinkki = KirjaVinkki(kirjoittaja=kirjoittaja,
@@ -130,8 +138,8 @@ class Ui:
             self.io.write(f'{str(vinkki)}\n')
 
     def add_new_videovinkki(self):
-        otsikko = self.io.read_input('Vinkin otsikko: ')
-        url = self.io.read_input('Videon url-osoite: ')
+        otsikko = self.min_information('Vinkin otsikko: ')
+        url = self.min_information('Videon url-osoite: ')
         kommentti = self.io.read_input('Vinkin kommentti: ')
         vinkki = VideoVinkki(otsikko = otsikko, url = url, kommentti = kommentti)
         self.db.add_video_vinkki_to_db(video = vinkki)
@@ -141,9 +149,9 @@ class Ui:
 
     def add_new_podcastvinkki(self):
         author = self.io.read_input('Author: ')
-        nimi = self.io.read_input('Podcastin nimi: ')
-        otsikko = self.io.read_input('Otsikko: ')
-        kuvaus = self.io.read_input('Kuvaus: ')
+        nimi = self.min_information('Podcastin nimi: ')
+        otsikko = self.min_information('Otsikko: ')
+        kuvaus = self.min_information('Kuvaus: ')
         vinkki = PodcastVinkki(author = author, nimi = nimi, otsikko = otsikko, kuvaus = kuvaus)
         self.db.add_podcast_vinkki_to_db(podcast = vinkki)
         vinkki_id = vinkki.id
@@ -153,9 +161,10 @@ class Ui:
     def add_new_blogpostvinkki(self):
         author = self.io.read_input('Author: ')
         nimi = self.io.read_input('Blogpostin nimi: ')
-        otsikko = self.io.read_input('Otsikko: ')
+        otsikko = self.min_information('Otsikko: ')
         kommentti = self.io.read_input('Kommentti: ')
-        vinkki = BlogpostVinkki(author = author, nimi = nimi, otsikko = otsikko, kommentti = kommentti)
+        url = self.min_information('url-osoite: ')
+        vinkki = BlogpostVinkki(author = author, nimi = nimi, otsikko = otsikko, kommentti = kommentti, url=url)
         self.db.add_blogpost_vinkki_to_db(blogpost = vinkki)
         vinkki_id = vinkki.id
         self.add_tags_blogpostvinkki(vinkki_id)
