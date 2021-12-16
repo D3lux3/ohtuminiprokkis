@@ -1,6 +1,7 @@
 # Ohtuminiprojekti
 
 ![GitHub Actions](https://github.com/D3lux3/ohtuminiprokkis/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/D3lux3/ohtuminiprokkis/branch/main/graph/badge.svg?token=BPB8EMSJC8)](https://codecov.io/gh/D3lux3/ohtuminiprokkis)
 
 ### Product backlog
 
