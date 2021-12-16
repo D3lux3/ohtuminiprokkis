@@ -150,6 +150,19 @@ class Testdb(unittest.TestCase):
         self.assertEqual(tagi[1].nimi, tagi2.nimi)
         self.assertEqual(len(tagi), 2)
 
+    def test_tag_can_be_added_to_videovinkki(self):
+        self.tmp_db.add_video_vinkki_to_db(self.videovinkki)
+        tagi2 = Tagi(nimi = "tag2")
+        self.tmp_db.add_tag_to_videovinkki(self.videovinkki.id, self.tagi)
+        self.tmp_db.add_tag_to_videovinkki(self.videovinkki.id, tagi2)
+        query_result = self.tmp_db.session.query(VideoVinkki).all()
+        tagi = query_result[0].related_tags
+
+        self.assertEqual(tagi[0].nimi, self.tagi.nimi)
+        self.assertEqual(tagi[1].nimi, tagi2.nimi)
+        self.assertEqual(len(tagi), 2)
+
+
     # viitteen tallentuminen
     def test_course_added_to_kirjavinkki_is_saved_to_Kurssit(self):
         self.tmp_db.add_vinkki_to_db(self.kirjavinkki)
