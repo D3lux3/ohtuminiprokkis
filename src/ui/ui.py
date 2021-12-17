@@ -312,7 +312,7 @@ class Ui:
         tagi_id = self.io.read_input('haettavan tagin id: ')
         haettava_tagi = self.process_command(tagi_id)
         if haettava_tagi != None:
-            if int(tagi_id) <= len(tagit):
+            if 0 < int(tagi_id) <= len(tagit):
                 vinkit = self.db.search_vinkki_by_tag(haettava_tagi)
                 for vinkki in vinkit:
                     self.io.write(vinkki)
