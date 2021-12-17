@@ -308,14 +308,20 @@ class Ui:
 
     def search_by_tag(self):
         self.io.write('Anna tagin id:')
-        self.print_tagit_with_id()
-        haettava_tagi = self.process_command(self.io.read_input('haettavan tagin id: '))
-        vinkit = self.db.search_vinkki_by_tag(haettava_tagi)
-        for vinkki in vinkit:
-            self.io.write(vinkki)
+        tagit = self.print_tagit_with_id()
+        tagi_id = self.io.read_input('haettavan tagin id: ')
+        haettava_tagi = self.process_command(tagi_id)
+        if haettava_tagi != None:
+            if 0 < int(tagi_id) <= len(tagit):
+                vinkit = self.db.search_vinkki_by_tag(haettava_tagi)
+                for vinkki in vinkit:
+                    self.io.write(vinkki)
+            else:
+                self.io.write("Tagia ei löytynyt")
         
     def print_tagit_with_id(self):
         tagit = self.db.find_all_tagit()
         for tagi in tagit:
             self.io.write(f'id: {tagi.id} {tagi.nimi}')
 
+        return tagit
