@@ -135,7 +135,7 @@ class Ui:
         self.io.write('Vinkit:\n')
     
         for vinkki in vinkit:
-            self.io.write(f'{str(vinkki)}\n')
+            self.io.write(f'{vinkki.id} {str(vinkki)}\n')
 
     def add_new_videovinkki(self):
         otsikko = self.min_information('Vinkin otsikko: ')
@@ -266,11 +266,12 @@ class Ui:
             return
 
         self.io.write('Anna poistettavan vinkin id:\n')
-        self.print_vinkit_with_id()
+        #self.print_vinkit_with_id()
+        self.print_vinkit_with_type(tyyppi)
         user_input = self.process_command(self.io.read_input('Poistettavan vinkin id: '))
         if isinstance(user_input, int):# and tyyppi is not None:
             if self.db.delete_vinkki_with_id(user_input, tyyppi):
-                self.io.write(f'Vinkki tyyppiä {tyyppi}, id {user_input} poistettu')
+                self.io.write(f'Vinkki poistettu')
             else:
                 self.io.write('Vinkin poistaminen epäonnistui')
 
