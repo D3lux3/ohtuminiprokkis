@@ -72,11 +72,19 @@ class TestUi(unittest.TestCase):
 
         self.db_mock.add_podcast_vinkki_to_db.assert_called()
 
+    def test_delete_vinkki_called_when_selected(self):
+        self.io = Stub_io(["3", "1", "1", "0"])
+        self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
+        self.db_mock.find_all_vinkit_with_type.return_value = []
+        self.stub_ui.start()
+        
+        self.db_mock.delete_vinkki_with_id.assert_called()
+
     def test_add_videovinkki_calls_add_video_vinkki_to_db(self):
         self.io = Stub_io(["2", "2", "Never gonna give you up", "youtube.com/abcd", "Ihan ok video", "2", "2", "0"])
         self.stub_ui = Ui(self.io, self.db_mock, self.number_generator_mock)
         self.stub_ui.start()
-        
+
         self.db_mock.add_video_vinkki_to_db.assert_called()
     
     def test_add_blogpostvinkki_calls_add_blogpost_vinkki_to_db(self):
