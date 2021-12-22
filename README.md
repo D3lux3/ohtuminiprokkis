@@ -7,6 +7,10 @@
 
 <a href="https://docs.google.com/spreadsheets/d/18UunzrSmqwaxQoobDS-6G-ufC1mTFpKDdtghOMa9Yn4/">täällä</a>
 
+### Raportti
+
+[Linkki raporttiin](https://docs.google.com/document/d/1SJsyXV1ZPoJcZUIG0bWX1Y_G4qH4gZqFNfCgbh_EdDA/edit?usp=sharing)
+
 ### Definition of Done
 
 Valmiissa ohjelmistossa määritellyt vaatimukset on analysoitu, suunniteltu, ohjelmoitu, testattu, dokumentoitu, integroitu muuhun ohjelmaan ja se on viety tuotantoympäristöön.
